@@ -1026,8 +1026,8 @@
                            <!-- Legal başlığı altındaki liste bu şekilde olmalı -->
                             <li><a href="#terms" class="footer-link">Terms of Service</a></li>
                             <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
-                            <li><button onclick="openModal('refundModal')" class="footer-link text-left">Refund Policy</button></li>
-                            <li><button onclick="openModal('imprintModal')" class="footer-link text-left">Contact & Imprint</button></li>
+                            <li><a href="#refund" class="footer-link">Refund Policy</a></li>
+                            <li><a href="#imprint" class="footer-link">Contact & Imprint</a></li>
                         </ul>
                     </div>
                 </div>
@@ -1976,6 +1976,7 @@
             if (window.location.hash === '#terms') openModal('termsModal');
             if (window.location.hash === '#refund') openModal('refundModal');
             if (window.location.hash === '#imprint') openModal('imprintModal');
+            if (window.location.hash === '#pricing') openModal('pricingModal');
         });
 
         // Sayfa ilk açıldığında kontrol etmesi için:
@@ -1983,6 +1984,7 @@
         if (window.location.hash === '#terms') openModal('termsModal');
         if (window.location.hash === '#refund') openModal('refundModal');
         if (window.location.hash === '#imprint') openModal('imprintModal');
+        if (window.location.hash === '#pricing') openModal('pricingModal');
         
         // Intro handling
         window.addEventListener('load', () => {
