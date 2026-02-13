@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onyx AI - Generate Reality</title>
+    
+    <link rel="icon" type="image/png" href="websiteIcon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        onyx: '#050505',        // Deep Black
+                        onyxlight: '#0F0F0F', // Slightly lighter
+                        cherry: '#D2042D',    // Cherry Red
+                        cherrydark: '#8B0000', // Blood Red
+                        glass: 'rgba(255, 255, 255, 0.05)'
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'beam-left': 'beamLeft 1.5s ease-out forwards',
+                        'beam-right': 'beamRight 1.5s ease-out forwards',
+                        'luxury-reveal': 'luxuryReveal 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s',
+                        'subtitle-fade': 'fadeInUp 1.5s ease-out forwards 2.0s',
+                        'fade-out-intro': 'fadeOut 1s ease-in-out forwards 4.2s',
+                        'spotlight-left': 'spotlightLeft 10s ease-in-out infinite',
+                        'spotlight-right': 'spotlightRight 10s ease-in-out infinite alternate',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        beamLeft: {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '50%': { opacity: '0.5' },
+                            '100%': { transform: 'translateX(50vw)', opacity: '0' }
+                        },
+                        beamRight: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '50%': { opacity: '0.5' },
+                            '100%': { transform: 'translateX(-50vw)', opacity: '0' }
+                        },
+                        luxuryReveal: {
+                            '0%': { opacity: '0', filter: 'blur(20px)', letterSpacing: '1.2em', transform: 'scale(1.1)' },
+                            '100%': { opacity: '1', filter: 'blur(0px)', letterSpacing: '0.25em', transform: 'scale(1)' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1', visibility: 'visible' },
+                            '100%': { opacity: '0', visibility: 'hidden' }
+                        },
+                        spotlightLeft: {
+                            '0%': { transform: 'translateX(-20%) translateY(-20%) scale(1)', opacity: '0.4' },
+                            '50%': { transform: 'translateX(0%) translateY(0%) scale(1.2)', opacity: '0.6' },
+                            '100%': { transform: 'translateX(-20%) translateY(-20%) scale(1)', opacity: '0.4' }
+                        },
+                        spotlightRight: {
+                            '0%': { transform: 'translateX(20%) translateY(20%) scale(1)', opacity: '0.3' },
+                            '100%': { transform: 'translateX(0%) translateY(0%) scale(1.1)', opacity: '0.5' },
+                            '100%': { transform: 'translateX(0%) translateY(0%) scale(1)', opacity: '0.4' }
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom one */
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #D2042D;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(210, 4, 45, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        /* Grid Background Pattern */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D2042D; }
+        
+        /* Modal Scrollbar specifically */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D2042D; }
+
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff 20%, #D2042D 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Nav Glass */
+        .nav-glass {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Intro Overlay */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+
+        .laser-line {
+            position: absolute; height: 1px; width: 60%;
+            background: linear-gradient(90deg, transparent, #D2042D, transparent); 
+            opacity: 0.4; top: 50%;
+        }
+        
+        .glow-container {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 400px; height: 400px;
+            z-index: -1; opacity: 0.5;
+        }
+        
+        .glow-spot {
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(210, 4, 45, 0.3) 0%, transparent 70%);
+            filter: blur(50px);
+        }
+
+        .modal { transition: opacity 0.4s ease, visibility 0.4s ease; }
+        .modal-active { opacity: 1; visibility: visible; }
+        .modal-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        /* Modal Watermark Decoration */
+        .modal-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-size: 300px;
+            opacity: 0.03;
+            pointer-events: none;
+            color: white;
+            z-index: 0;
+        }
+
+        .accordion-content { transition: max-height 0.4s cubic-bezier(0, 1, 0, 1); max-height: 0; overflow: hidden; }
+        .accordion-open .accordion-content { max-height: 1000px; } /* Increased for longer answers */
+        .accordion-icon { transition: transform 0.3s ease; }
+        .accordion-open .accordion-icon { transform: rotate(180deg); }
+        
+        .footer-link { position: relative; color: #9ca3af; transition: color 0.3s; }
+        .footer-link:hover { color: #D2042D; }
+        
+        /* Mobile Menu */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Style Tabs */
+        .style-tab {
+            position: relative;
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+        .style-tab.active {
+            opacity: 1;
+            color: white;
+        }
+        .style-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #D2042D;
+            box-shadow: 0 0 10px #D2042D;
+        }
+        
+        .style-grid {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .style-grid.active {
+            display: grid;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide Animation for Style Page */
+        .slide-page {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .slide-page.open {
+            transform: translateX(0);
+        }
+        .slide-page.closed {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cherry selection:text-white">
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <div id="intro-overlay" class="animate-fade-out-intro">
+        <div class="glow-container animate-pulse-slow"><div class="glow-spot"></div></div>
+        <div class="laser-line left-0 animate-beam-left" style="transform-origin: left;"></div>
+        <div class="laser-line right-0 animate-beam-right" style="transform-origin: right;"></div>
+
+        <div class="z-10 flex flex-col items-center justify-center relative">
+            <h1 class="text-7xl md:text-9xl font-bold opacity-0 animate-luxury-reveal bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-300 to-gray-600 drop-shadow-2xl">
+                ONYX
+            </h1>
+            <div class="text-xs md:text-sm tracking-[0.8em] text-cherry font-medium uppercase mt-8 opacity-0 animate-subtitle-fade">
+                Generate Reality
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+        <nav class="nav-glass rounded-full w-full max-w-5xl px-6 py-3 flex justify-between items-center transition-all duration-300">
+            <a href="#" class="text-xl font-bold tracking-widest flex items-center gap-3 group relative">
+                <div class="relative w-14 h-14 -my-4 flex-shrink-0">
+                    <img src="icon.png" alt="Onyx Logo" class="w-full h-full object-contain group-hover:rotate-12 transition-transform duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                </div>
+                <span class="text-white group-hover:text-cherry transition-colors duration-300">ONYX</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8 text-xs font-medium tracking-wider text-gray-400 uppercase items-center">
+                <a href="#features" class="hover:text-white transition-colors relative group">
+                    Features
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cherry transition-all group-hover:w-full"></span>
+                </a>
+                <button onclick="openStyleView()" class="hover:text-white transition-colors relative group uppercase">
+                    Styles
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cherry transition-all group-hover:w-full"></span>
+                </button>
+                <a href="#faq" class="hover:text-white transition-colors relative group">
+                    FAQ
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cherry transition-all group-hover:w-full"></span>
+                </a>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="#download" class="px-5 py-2 bg-white text-black text-xs font-bold uppercase tracking-wide rounded-full hover:bg-cherry hover:text-white transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_rgba(210,4,45,0.6)]">
+                    Get App
+                </a>
+            </div>
+
+            <button class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </nav>
+    </div>
+
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-onyx flex flex-col items-center justify-center space-y-8 text-2xl font-bold uppercase tracking-widest text-white/80">
+        <button class="absolute top-8 right-8 text-cherry text-3xl" onclick="toggleMobileMenu()">&times;</button>
+        <a href="#features" onclick="toggleMobileMenu()">Features</a>
+        <button onclick="toggleMobileMenu(); openStyleView();">Styles</button>
+        <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
+        <a href="#download" class="text-cherry" onclick="toggleMobileMenu()">Download</a>
+    </div>
+
+    <div id="main-content" class="transition-all duration-500">
+        
+        <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+            <div class="absolute inset-0 bg-grid opacity-20 pointer-events-none"></div>
+            
+            <div class="absolute top-0 left-0 w-[800px] h-[800px] bg-cherry/10 rounded-full blur-[150px] animate-spotlight-left mix-blend-screen pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[150px] animate-spotlight-right mix-blend-screen pointer-events-none"></div>
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <div data-aos="fade-up" data-aos-duration="1200" data-aos-delay="3000">
+                    
+                    <div class="inline-block px-4 py-1 border border-white/10 rounded-full bg-white/5 backdrop-blur-sm mb-6 animate-pulse-slow">
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-gray-300">V1.0 Now Available</span>
+                    </div>
+
+                    <h1 class="text-6xl md:text-9xl font-bold mb-6 leading-none tracking-tighter">
+                        GENERATE <br>
+                        <span class="text-gradient">REALITY</span>
+                    </h1>
+                    
+                    <p class="text-white text-lg md:text-xl max-w-2xl mx-auto mb-8 font-medium tracking-wide text-gray-300">
+                        Transform your photos into stunning AI-generated videos with multiple providers and creative effects.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20 scroll-mt-32" id="download">
+                        
+                        <a href="https://apps.apple.com/app/id6757226056" target="_blank" class="group px-8 py-4 bg-white text-black rounded-2xl font-bold text-lg transition-all hover:bg-gray-200 w-64 flex items-center justify-center hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                            <div class="flex items-center justify-center gap-3">
+                                <i class="fab fa-apple text-2xl"></i>
+                                <div class="text-left">
+                                    <span class="block text-[10px] uppercase tracking-wider opacity-60">Download on</span>
+                                    <span class="leading-none">App Store</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://play.google.com/store/apps/details?id=com.yourcompany.onyx" target="_blank" class="group px-8 py-4 bg-black border border-white/20 text-white rounded-2xl font-bold text-lg transition-all hover:bg-gray-900 w-64 flex items-center justify-center hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                            <div class="flex items-center justify-center gap-3">
+                                <i class="fab fa-google-play text-xl text-white"></i>
+                                <div class="text-left">
+                                    <span class="block text-[10px] uppercase tracking-wider opacity-60">Get it on</span>
+                                    <span class="leading-none">Google Play</span>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div class="relative max-w-5xl mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="3200">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-cherry/40 blur-[100px] rounded-full"></div>
+                    <div class="animate-float relative z-10 group">
+                        <div class="mx-auto w-[300px] md:w-[350px] h-[600px] md:h-[700px] bg-black border-[8px] border-onyxlight rounded-[3rem] shadow-2xl overflow-hidden relative ring-1 ring-white/10 transition-transform duration-500 group-hover:rotate-1">
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-30"></div>
+                            
+                            <div class="w-full h-full relative overflow-hidden bg-onyx">
+                                <img src="https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=1974&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay" alt="Texture">
+                                <div class="absolute inset-0 bg-gradient-to-br from-cherrydark via-black to-black opacity-90"></div>
+                                
+                                <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#D2042D 1px, transparent 1px); background-size: 20px 20px;"></div>
+                                
+                                <div class="absolute top-[-20%] right-[-20%] w-[100%] h-[50%] bg-cherry blur-[80px] rounded-full opacity-40 animate-pulse-slow"></div>
+                                <div class="absolute bottom-[-10%] left-[-10%] w-[80%] h-[40%] bg-purple-900 blur-[80px] rounded-full opacity-30"></div>
+
+                                <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+                                    <div class="w-32 h-32 bg-black rounded-3xl border border-white/20 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-6 overflow-hidden relative group-hover:scale-110 transition-transform duration-500">
+                                        <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                                        <img src="icon.png" alt="App Icon" class="w-20 h-20 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                                    </div>
+                                    <h3 class="text-4xl font-bold tracking-[0.2em] text-white drop-shadow-lg">ONYX</h3>
+                                    <p class="text-[10px] text-gray-400 tracking-widest mt-2 uppercase">Reality Engine v1.0</p>
+                                </div>
+
+                                <div class="absolute bottom-12 left-6 right-6 flex flex-col gap-3">
+                                    <div class="bg-white/5 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-3 transform translate-y-2 opacity-80">
+                                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cherry to-orange-500"></div>
+                                        <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                            <div class="h-full w-2/3 bg-white/50 rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white/5 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center justify-between">
+                                        <span class="text-[10px] font-bold text-white uppercase tracking-wider">Generating Hug...</span>
+                                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="bg-cherry text-black py-3 overflow-hidden border-y border-cherrydark relative z-30 rotate-1 md:rotate-2 scale-105 my-20">
+            <div class="whitespace-nowrap animate-marquee flex gap-10 font-bold uppercase tracking-widest text-sm md:text-base">
+                <span>Video Generation</span> • <span>Image to Video</span> • <span>Hugging Effect</span> • <span>Style Transfer</span> • <span>No Login Required</span> • <span>4K Export</span> • 
+                <span>Video Generation</span> • <span>Image to Video</span> • <span>Hugging Effect</span> • <span>Style Transfer</span> • <span>No Login Required</span> • <span>4K Export</span> •
+                <span>Video Generation</span> • <span>Image to Video</span> • <span>Hugging Effect</span> • <span>Style Transfer</span> • <span>No Login Required</span> • <span>4K Export</span> •
+            </div>
+        </div>
+
+        <section id="features" class="py-20 bg-onyx relative z-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center" data-aos="fade-up">Limitless <span class="text-cherry">Possibilities</span></h2>
+
+                <div class="glass-card rounded-3xl p-1 md:p-2 mb-20 group hover:border-cherry/50 transition-colors duration-500" data-aos="fade-right">
+                    <div class="bg-black rounded-2xl overflow-hidden relative grid md:grid-cols-2 gap-0">
+                        <div class="p-12 flex flex-col justify-center order-2 md:order-1 relative">
+                            <div class="absolute top-0 right-0 p-10 opacity-10">
+                                <i class="fas fa-video text-9xl"></i>
+                            </div>
+                            <i class="fas fa-heart text-4xl text-cherry mb-6"></i>
+                            <h3 class="text-3xl font-bold mb-4 text-white">Photo to Video</h3>
+                            <p class="text-gray-400 leading-relaxed text-lg">
+                                Perfect for TikTok and Instagram Reels. Turn static photos into emotional videos with motion. Bring memories to life with our advanced physics engine.
+                            </p>
+                        </div>
+                        <div class="h-80 md:h-auto bg-[url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2832&auto=format&fit=crop')] bg-cover bg-center order-1 md:order-2 opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-card rounded-3xl p-1 md:p-2 group hover:border-white/20" data-aos="fade-up">
+                        <div class="bg-black rounded-2xl overflow-hidden h-full flex flex-col relative">
+                            <div class="h-64 bg-[url('https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-105 transition-transform duration-700"></div>
+                            <div class="p-10 relative z-10 bg-gradient-to-t from-black via-black to-transparent -mt-20">
+                                <h3 class="text-2xl font-bold mb-3">Character Swap</h3>
+                                <p class="text-gray-400">Transform into anime characters or superheroes instantly using our localized face-mapping technology.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-3xl p-1 md:p-2 group hover:border-white/20" data-aos="fade-up" data-aos-delay="200">
+                        <div class="bg-black rounded-2xl overflow-hidden h-full flex flex-col relative">
+                            <div class="h-64 bg-[url('https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=2808&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-105 transition-transform duration-700"></div>
+                            <div class="p-10 relative z-10 bg-gradient-to-t from-black via-black to-transparent -mt-20">
+                                <h3 class="text-2xl font-bold mb-3">Onyx 2.0 Integration</h3>
+                                <p class="text-gray-400">High-fidelity video generation. The most advanced model on the market delivering 4K 60fps results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="py-32 bg-black relative">
+            <div class="absolute inset-0 bg-grid opacity-10 pointer-events-none"></div>
+            <div class="container mx-auto px-6 max-w-3xl relative z-10">
+                <h2 class="text-3xl font-bold mb-12 flex items-center gap-3" data-aos="fade-up">
+                    <span class="w-2 h-8 bg-cherry"></span>
+                    Help Center
+                </h2>
+                
+                <div class="space-y-4" data-aos="fade-up" data-aos-delay="200">
+                    
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-coins text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Is Onyx free?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx is free to download and explore. To unlock high-resolution exports (4K), remove watermarks, and get unlimited generation credits, a Pro subscription is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-circle-info text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Why is there no free trial?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx isn't just an app; it's a direct link to the world's most powerful render farms. Real-time AI video generation requires strictly allocated H100 GPU clusters that cost millions. A free trial would compromise the rendering speed and quality for our paying members.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-user text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Is account creation required?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Yes, creating a secure account is necessary to use Onyx. This ensures your high-fidelity renders are safely processed on our cloud servers and allows you to sync your generated gallery across multiple devices.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-paint-brush text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Can I use my own custom styles?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Absolutely! The style library is just a starting point. You can simply describe any visual style, era, or artistic medium you desire directly within your text prompt. Your creativity is the only limit.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-eye text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Since there is no free trial, how can I see the results?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                You can visit our official TikTok page to view our projects. We share unedited, high-quality examples of what Onyx can create, giving you a transparent look at the app's capabilities before you subscribe.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-video text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I generate a video?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx offers two ways to generate videos:<br><br>
+                                <strong>Text to Video:</strong><br>
+                                • Select "Text to Video" from Generation Type<br>
+                                • Write a detailed prompt describing your scene<br>
+                                • Select style, quality, and duration<br>
+                                • No file upload needed - just your imagination!<br><br>
+                                <strong>Image to Video:</strong><br>
+                                • Select "Image to Video" from Generation Type<br>
+                                • Upload a reference image<br>
+                                • Accepted Types: JPG, JPEG, PNG, WebP, GIF, AVIF<br>
+                                • The AI will animate your image into a video<br><br>
+                                Your video will be ready in a few minutes!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-person-running text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I use Motion Control?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Motion Control allows you to create videos with precise movement patterns:<br><br>
+                                1. Select "Motion Control" from Generation Type<br>
+                                2. Upload a reference image (the subject to animate)<br>
+                                3. Upload a motion video (the movement to apply)<br>
+                                4. Write a prompt describing the scene<br>
+                                5. Tap Generate<br><br>
+                                Accepted Image Types: JPG, JPEG, PNG, WebP, GIF, AVIF<br>
+                                Accepted Video Types: MP4, MOV, WebM, M4V, GIF<br><br>
+                                The AI will apply the motion from your reference video to the subject in your image.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-images text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I access my gallery?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                To view your generated videos and images, swipe left from the home screen or tap the Gallery icon at the bottom. You can swipe right to return to the home screen.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-palette text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">What video styles are available?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx offers 6 stunning styles: Realistic, Anime, 3D Render, Cinematic, Cyberpunk, and Fantasy. Each style creates unique and professional results.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-wand-magic-sparkles text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Why is Onyx the best AI generator?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx uses cutting-edge AI models to deliver the most realistic and high-quality results:<br><br>
+                                • Images: Our advanced AI system produces photorealistic images with incredible detail and accuracy<br>
+                                • Videos: We create smooth, cinematic videos with natural motion and professional quality<br>
+                                • 6 Premium Styles: From realistic to artistic, each style is optimized for maximum quality<br>
+                                • Fast Processing: Industry-leading generation speed without compromising quality<br><br>
+                                Our AI technology is constantly updated to ensure you always get the best possible results for both images and videos.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-clock text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How long does generation take?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Video generation typically takes 1-5 minutes depending on complexity and server load. You'll receive a notification when it's ready.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-circle-xmark text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Can I cancel my subscription?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Yes! You can cancel your Onyx Pro subscription anytime from your Account settings or the App Store/Play Store. No questions asked.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-calendar-xmark text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Do subscription credits roll over to the next billing period?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                No. Subscription credits do NOT roll over. Any unused credits are forfeited when your subscription renews. We recommend using all your credits before the end of each billing cycle.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-money-bill-1-wave text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Can I get a refund for unused credits?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                No. Credits have no cash value and cannot be refunded, converted to cash, or exchanged for money under any circumstances. All purchases are final and non-refundable.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-infinity text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Do one-time credit purchases expire?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                No. One-time credit purchases (e.g., 1200 credits for $5.99 or 5000 credits for $22.99) do not expire and remain in your account indefinitely as long as your account is active.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-rotate text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">I purchased credits but don't see them. What should I do?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Credits may take a few seconds to sync. If you don't see your credits immediately after purchase:<br><br>
+                                1. Close and reopen the app (this forces a refresh)<br>
+                                2. Check your internet connection<br>
+                                3. Wait 10-30 seconds and check again<br><br>
+                                If credits still don't appear after 5 minutes, contact support with your purchase receipt.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-cloud-arrow-down text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">What happens to my videos?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                All generated videos are saved to your device automatically. You can also share them directly to social media or save to cloud storage.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-lightbulb text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I improve results?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Use detailed, descriptive prompts. Include lighting, camera angles, and mood. For example: "Sunset over mountains, cinematic wide shot, golden hour lighting."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-pen-to-square text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How to write effective prompts for better photos/videos?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Be very detailed and specific in your prompts. Include the subject, action, environment, lighting conditions, camera angle, and artistic style. For example: "A beautiful woman dancing in rain, neon city lights reflecting on wet pavement, cinematic shot, slow motion, dramatic lighting, vibrant colors." The more descriptive you are, the better quality results you'll achieve.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-music text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Why do audio files open in video player?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Audio files (like AI-generated voiceovers or text-to-speech) are saved in your device's Downloads folder and may appear in your gallery alongside videos. This is normal behavior - your device's media player will handle them correctly. In the Onyx app, audio files have a dedicated audio player with playback controls.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-comment-dots text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I use Text to Speech?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Convert your text into natural-sounding speech:<br><br>
+                                1. Select "Text to Speech" from Generation Type<br>
+                                2. Enter your text in the prompt field<br>
+                                3. Tap Generate to create the audio<br><br>
+                                Text to Speech creates natural-sounding voiceovers in English.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-cube text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I generate 3D models?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Create 3D models from text or images:<br><br>
+                                <strong>Text to 3D:</strong><br>
+                                • Select "Text to 3D" and describe your object<br>
+                                • Example: "A red sports car with chrome wheels"<br>
+                                • Just enter text - no file upload needed<br><br>
+                                <strong>Image to 3D:</strong><br>
+                                • Select "Image to 3D" and upload an image<br>
+                                • The AI converts it into a 3D model<br>
+                                • Accepted Types: JPG, JPEG, PNG, WebP, GIF, AVIF<br><br>
+                                Note: Studio Controls (quality, camera) are disabled for 3D generation.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-wand-magic text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How does Image to Image work?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Transform or edit existing images with AI:<br><br>
+                                1. Select "Image to Image" from Generation Type<br>
+                                2. Upload the image you want to transform<br>
+                                3. Describe the changes in your prompt<br>
+                                4. Select a style for the transformation<br><br>
+                                Accepted Image Types: JPG, JPEG, PNG, WebP, GIF, AVIF<br><br>
+                                Example prompts:<br>
+                                • "Make it look like a watercolor painting"<br>
+                                • "Add sunset lighting"<br>
+                                • "Transform to anime style"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-music text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I create music with AI?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Onyx can generate music in multiple ways:<br><br>
+                                <strong>Text to Music (Lyrics):</strong><br>
+                                • Generates songs with vocals and lyrics<br>
+                                • Requires TWO inputs:<br>
+                                &nbsp;&nbsp;- Prompt: Describe genre, mood, style (e.g., "Indie folk, melancholic, introspective")<br>
+                                &nbsp;&nbsp;- Lyrics: Write the actual song lyrics with [verse], [chorus] tags<br><br>
+                                <strong>Text to Music (Instrumental):</strong><br>
+                                • Creates instrumental tracks without vocals<br>
+                                • Just describe genre, tempo, and mood<br>
+                                • No lyrics input needed<br><br>
+                                <strong>Text to SFX:</strong><br>
+                                • Generate sound effects from text description<br>
+                                • Example: "Thunder rolling in the distance"<br>
+                                • Great for video projects and game development
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-microphone-lines text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">How do I use Speech to Text?</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                Convert audio recordings to text transcription:<br><br>
+                                1. Select "Speech to Text" from Generation Type<br>
+                                2. Upload an audio file containing speech<br>
+                                3. Tap Generate to transcribe<br>
+                                4. Copy the transcribed text from the result dialog<br><br>
+                                Accepted Audio Types: MP3, OGG, WAV, M4A, AAC<br><br>
+                                Tips:<br>
+                                • Clear audio with minimal background noise works best<br>
+                                • Supports multiple languages<br>
+                                • Results are saved in your Gallery under "Transcripts"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-filter text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Content Filter</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                If your prompt gives an error, it may have been caught by the +18 filter. Try modifying and retrying.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/5 bg-white/5 rounded-xl px-6 mb-4 accordion-item transition-all hover:border-white/10">
+                        <button class="w-full flex justify-between items-center py-6 text-left focus:outline-none group" onclick="toggleAccordion(this)">
+                            <div class="flex items-center gap-4">
+                                <i class="fas fa-person-running text-cherry text-xl w-6"></i>
+                                <span class="text-lg text-gray-300 group-hover:text-white transition-colors font-medium">Motion Control Guide</span>
+                            </div>
+                            <i class="fas fa-plus text-gray-500 accordion-icon group-hover:text-cherry"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                                • Upload a clear half-body/full-body image of ONE character<br>
+                                • Upload a motion reference video (max 10 sec)<br>
+                                • Video should have continuous, smooth motion<br>
+                                • Character orientation in image should match video for best results<br>
+                                • Only real humans or human-like characters supported
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-onyx pt-20 pb-10 border-t border-white/5 text-sm relative overflow-hidden">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[300px] bg-gradient-to-t from-cherry/10 to-transparent blur-[100px] pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 text-gray-500">
+                    
+                    <div class="col-span-2 md:col-span-1">
+                        <a href="#" class="text-2xl font-bold text-white mb-6 block tracking-widest">ONYX</a>
+                        <p class="mb-6 leading-relaxed">
+                            Redefining reality through generative AI. Join thousands of creators shaping the future of digital art.
+                        </p>
+                        <div class="flex gap-4">
+                            
+                            <a href="https://tiktok.com/@onyx_ai" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-white mb-6 uppercase tracking-wider text-xs">Product</h4>
+                        <ul class="space-y-4">
+                            <li><button onclick="openModal('aiGeneratorModal')" class="footer-link text-left">AI Generator</button></li>
+                            <li><button onclick="openStyleView()" class="footer-link text-left">Video Styles</button></li>
+                            <li><button onclick="openModal('pricingModal')" class="footer-link text-left">Pricing</button></li>
+                            </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-white mb-6 uppercase tracking-wider text-xs">Company</h4>
+                        <ul class="space-y-4">
+                            <li><button onclick="openModal('aboutModal')" class="footer-link text-left">About Us</button></li>
+                            <li><button onclick="openModal('blogModal')" class="footer-link text-left">Blog</button></li>
+                            <li><button onclick="openModal('contactModal')" class="footer-link text-left">Contact</button></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-white mb-6 uppercase tracking-wider text-xs">Legal</h4>
+                        <ul class="space-y-4">
+                           <!-- Legal başlığı altındaki liste bu şekilde olmalı -->
+                            <li><a href="#terms" class="footer-link">Terms of Service</a></li>
+                            <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-center opacity-10 pointer-events-none select-none">
+                    <span class="text-[15vw] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent">ONYX</span>
+                </div>
+
+                <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                    <div class="flex items-center gap-2">
+                        <p>© 2026 Onyx AI Inc. All rights reserved.</p>
+                    </div>
+                    <div class="flex gap-6 mt-4 md:mt-0">
+                        <a href="mailto:onyx.ai.helpcenter@gmail.com" class="hover:text-white transition-colors flex items-center gap-2">
+                            <i class="fas fa-headset text-lg"></i> <span class="hidden md:inline">Support</span>
+                        </a>
+                        <span class="flex items-center gap-2"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Systems Operational</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="style-library-view" class="fixed inset-0 z-[100] bg-onyx overflow-y-auto slide-page closed">
+        <div class="sticky top-0 z-50 bg-onyx/90 backdrop-blur-md border-b border-white/5 px-6 py-4 flex items-center gap-4">
+            <button onclick="closeStyleView()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-cherry hover:text-white text-gray-400 flex items-center justify-center transition-colors">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-xl font-bold tracking-widest uppercase">Style Library</h2>
+        </div>
+
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Explore <span class="text-cherry">Styles</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Browse our curated collection or create your own masterpiece.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-6 mb-12 sticky top-24 z-40 py-4 bg-onyx/80 backdrop-blur-sm rounded-xl">
+                <button onclick="switchTab('transformation')" class="style-tab active text-lg font-bold tracking-widest uppercase pb-2 focus:outline-none" id="tab-transformation">Transformation</button>
+                <button onclick="switchTab('artistic')" class="style-tab text-lg font-bold tracking-widest uppercase pb-2 focus:outline-none" id="tab-artistic">Artistic</button>
+                <button onclick="switchTab('cinematic')" class="style-tab text-lg font-bold tracking-widest uppercase pb-2 focus:outline-none" id="tab-cinematic">Cinematic</button>
+                <button onclick="switchTab('fantasy')" class="style-tab text-lg font-bold tracking-widest uppercase pb-2 focus:outline-none" id="tab-fantasy">Fantasy</button>
+            </div>
+
+            <div id="style-container" class="min-h-[600px] pb-20">
+                </div>
+        </div>
+    </div>
+
+    <div id="aiGeneratorModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('aiGeneratorModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-lg p-8 rounded-2xl shadow-2xl flex flex-col items-center text-center m-4 overflow-hidden">
+            <button onclick="closeModal('aiGeneratorModal')" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors z-50"><i class="fas fa-times text-xl"></i></button>
+            
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fas fa-microchip text-9xl"></i>
+            </div>
+            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 relative z-10">
+                <i class="fas fa-desktop text-2xl text-white"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-white mb-2 relative z-10">Web Portal Access</h3>
+            <div class="w-12 h-1 bg-cherry rounded-full mb-6 relative z-10"></div>
+            <p class="text-gray-400 mb-8 leading-relaxed relative z-10">
+                The Onyx Web Interface is currently restricted to <span class="text-white font-bold">Enterprise Partners</span> and <span class="text-white font-bold">Studio Tier</span> subscribers. This limitation ensures unthrottled GPU allocation for our mobile users.
+                <br><br>
+                To experience the power of Onyx, please download the mobile application.
+            </p>
+            <a href="#download" onclick="closeModal('aiGeneratorModal')" class="px-8 py-3 bg-white text-black font-bold uppercase tracking-widest rounded-full hover:bg-cherry hover:text-white transition-all w-full relative z-10">
+                Download App
+            </a>
+        </div>
+    </div>
+
+    <div id="pricingModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal('pricingModal')"></div>
+        <div class="relative w-full max-w-6xl h-[90vh] flex flex-col m-4">
+            <div class="flex justify-end p-4">
+                <button onclick="closeModal('pricingModal')" class="text-white hover:text-cherry transition-colors"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar px-4 pb-10">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Uncompromised <span class="text-cherry">Power</span></h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">True rendering power has a cost. Choose the plan that fits your creative needs.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8 transition-all flex flex-col relative overflow-hidden group hover:border-white/20">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-300 uppercase tracking-widest">Weekly Plan</h3>
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="text-4xl font-bold text-white mb-6">$12.99 <span class="text-sm font-normal text-gray-500">/ month</span></div>
+                        <ul class="space-y-4 mb-8 flex-1 text-sm text-gray-300">
+                            <li class="flex items-center gap-3"><i class="fas fa-bolt text-cherry"></i> <span><strong>2500</strong> Credits</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-gray-500"></i> <span>No Watermark</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-gray-500"></i> <span>4K Upscaling</span></li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-center gap-2 text-xs text-gray-500 uppercase tracking-widest">
+                            <i class="fab fa-app-store-ios"></i> Available in App
+                        </div>
+                    </div>
+
+                    <div class="bg-onyx border border-cherry/50 rounded-2xl p-8 transform md:-translate-y-2 shadow-[0_0_40px_rgba(210,4,45,0.15)] flex flex-col relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cherry to-transparent"></div>
+                        <div class="absolute top-0 right-0 px-3 py-1 bg-cherry text-[10px] uppercase font-bold tracking-widest rounded-bl-xl text-white shadow-lg">Best Value</div>
+                        
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white uppercase tracking-widest">Monthly Plan</h3>
+                            <div class="w-10 h-10 rounded-full bg-cherry/20 flex items-center justify-center text-cherry border border-cherry/30">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        </div>
+
+                        <div class="text-4xl font-bold text-white mb-6">$49.99 <span class="text-sm font-normal text-gray-500">/ month</span></div>
+                        
+                        <ul class="space-y-4 mb-8 flex-1 text-sm text-white">
+                            <li class="flex items-center gap-3"><i class="fas fa-bolt text-cherry"></i> <span><strong>10000</strong> Credits</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-star text-cherry"></i> <span>Priority GPU Access</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-cherry"></i> <span>Commercial License</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-cherry"></i> <span>Lossless Export</span></li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-center gap-2 text-xs text-cherry uppercase tracking-widest font-bold">
+                            <i class="fab fa-app-store-ios"></i> Available in App
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8 transition-all flex flex-col relative overflow-hidden hover:border-white/20">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-300 uppercase tracking-widest">Mini Pack</h3>
+                            <div class="w-10 h-10 rounded-full bg-blue-900/20 flex items-center justify-center text-blue-400">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                        </div>
+                        <div class="text-4xl font-bold text-white mb-6">$5.99</div>
+                        <ul class="space-y-4 mb-8 flex-1 text-sm text-gray-300">
+                            <li class="flex items-center gap-3"><i class="fas fa-coins text-yellow-500"></i> <span><strong>1200</strong> Credits</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-infinity text-blue-400"></i> <span>Does not expire</span></li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-center gap-2 text-xs text-gray-500 uppercase tracking-widest">
+                            <i class="fas fa-wallet"></i> One-Time Purchase
+                        </div>
+                    </div>
+
+                      <div class="bg-white/5 border border-white/10 rounded-2xl p-8 transition-all flex flex-col relative overflow-hidden hover:border-white/20">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-300 uppercase tracking-widest">Mega Pack</h3>
+                            <div class="w-10 h-10 rounded-full bg-blue-900/20 flex items-center justify-center text-blue-400">
+                                <i class="fas fa-cubes"></i>
+                            </div>
+                        </div>
+                        <div class="text-4xl font-bold text-white mb-6">$22.99</div>
+                        <ul class="space-y-4 mb-8 flex-1 text-sm text-gray-300">
+                            <li class="flex items-center gap-3"><i class="fas fa-coins text-yellow-500"></i> <span><strong>5000</strong> Credits</span></li>
+                            <li class="flex items-center gap-3"><i class="fas fa-infinity text-blue-400"></i> <span>Does not expire</span></li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-center gap-2 text-xs text-gray-500 uppercase tracking-widest">
+                            <i class="fas fa-wallet"></i> One-Time Purchase
+                        </div>
+                    </div>
+
+                </div>
+                <p class="text-center text-gray-600 text-xs mt-12">* Prices reflect the cost of dedicated H100 NVIDIA GPU time.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('aboutModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-2xl p-8 rounded-2xl shadow-2xl flex flex-col m-4">
+            <h2 class="text-3xl font-bold text-white mb-6">About <span class="text-cherry">Onyx</span></h2>
+            <div class="space-y-6 text-gray-400 leading-relaxed font-light">
+                <p>
+                    Onyx was born from a singular, obsessive pursuit: <strong>Perfection in motion.</strong>
+                </p>
+                <p>
+                    While others race to the bottom with cheap, low-resolution generation, we looked up. We saw a gap in the market for true luxury in artificial intelligence. We are a collective of elite engineers, generative artists, and visionaries who believe that technology should feel like magic.
+                </p>
+                <p>
+                    We operate on a "quality-first, cost-second" philosophy. Our infrastructure utilizes the world's most powerful render farms, ensuring that every pixel you generate is a masterpiece. We are not for everyone. We are for the creators who refuse to compromise.
+                </p>
+            </div>
+            <button onclick="closeModal('aboutModal')" class="mt-8 self-end text-white hover:text-cherry transition-colors uppercase tracking-widest text-sm font-bold">Close</button>
+        </div>
+    </div>
+
+    <div id="blogModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('blogModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-4xl h-[80vh] rounded-2xl shadow-2xl flex flex-col m-4 overflow-hidden">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+                <h2 class="text-2xl font-bold text-white tracking-widest">INSIGHTS</h2>
+                <button onclick="closeModal('blogModal')" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            
+            <div class="overflow-y-auto custom-scrollbar p-8 grid md:grid-cols-2 gap-8">
+                <div class="group cursor-pointer">
+                    <div class="h-48 bg-gray-800 rounded-xl mb-4 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-cherry/20 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2865&auto=format&fit=crop" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-xs text-cherry font-bold uppercase mb-2">Technology</div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cherry transition-colors">The Death of the Shutter: Why Generative Video is the Future</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">We explore how traditional videography is evolving into prompt-based creation and what this means for high-end production studios.</p>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="h-48 bg-gray-800 rounded-xl mb-4 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-cherry/20 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=2695&auto=format&fit=crop" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=2070&auto=format&fit=crop'">
+                    </div>
+                    <div class="text-xs text-cherry font-bold uppercase mb-2">Engineering</div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cherry transition-colors">Scaling H100 Clusters for Real-Time Rendering</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">A deep dive into Onyx's backend infrastructure and how we manage exclusive GPU allocation for our Pro subscribers.</p>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="h-48 bg-gray-800 rounded-xl mb-4 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-cherry/20 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2940&auto=format&fit=crop" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-xs text-cherry font-bold uppercase mb-2">Security</div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cherry transition-colors">Deepfake Detection & Ethics in AI</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Our commitment to responsible AI development and the safeguards we implement to prevent misuse of our generative models.</p>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="h-48 bg-gray-800 rounded-xl mb-4 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-cherry/20 group-hover:bg-transparent transition-colors"></div>
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2864&auto=format&fit=crop" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-xs text-cherry font-bold uppercase mb-2">Art</div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cherry transition-colors">From Prompt to Pixel: Mastering Style Control</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Tips and tricks from our lead artists on how to construct complex prompts for consistent character styling.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacyModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal('privacyModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl flex flex-col m-4 overflow-hidden group">
+            
+            <div class="absolute inset-0 bg-gradient-to-b from-cherry/5 to-transparent pointer-events-none"></div>
+            <i class="fas fa-shield-alt modal-watermark"></i>
+
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-6 bg-cherry rounded-full"></div>
+                    <h2 class="text-xl font-bold text-white tracking-widest uppercase">Privacy Policy</h2>
+                </div>
+                <button onclick="closeModal('privacyModal')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-cherry transition-all"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="p-8 overflow-y-auto text-gray-300 leading-relaxed space-y-6 font-light text-sm custom-scrollbar relative z-10">
+                 <div class="bg-white/5 p-4 rounded-lg border border-white/5 mb-6">
+                     <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Last Updated</p>
+                     <p class="text-white font-mono">January 2026</p>
+                 </div>
+                
+                 <div class="prose prose-invert prose-sm max-w-none">
+                     <p>Welcome to Onyx. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, protect, and share your personal information when you use our AI-powered video and image generation application.</p>
+                     <p>By using Onyx, you agree to the collection and use of information in accordance with this policy.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">1. WHO WE ARE</h3>
+                     <p>Onyx ("we", "us", or "our") is an AI-powered video and image generation application that enables users to create visual content using advanced artificial intelligence technology.</p>
+                     <p>Contact: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">2. INFORMATION WE COLLECT</h3>
+                     <p>We collect and process the following types of data to provide our service:</p>
+                     
+                     <h4 class="font-bold text-white mt-4">2.1 Account Information</h4>
+                     <p>When you sign up, we collect:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Email address</li>
+                         <li>Unique User ID (via Google Firebase Authentication)</li>
+                         <li>Account creation date</li>
+                         <li>Profile settings</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">2.2 Content and Usage Data</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Text prompts you enter for generation</li>
+                         <li>Style presets and generation parameters you select</li>
+                         <li>Generated images and videos</li>
+                         <li>Favorited content</li>
+                         <li>Generation history and timestamps</li>
+                         <li>Credit usage and balance</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">2.3 Device and Technical Data</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Device type and model</li>
+                         <li>Operating system version (iOS/Android)</li>
+                         <li>Unique device identifiers</li>
+                         <li>App version</li>
+                         <li>Crash logs and error reports</li>
+                         <li>Performance data</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">2.4 Purchase and Subscription Data</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Subscription status and type (weekly/monthly/yearly)</li>
+                         <li>Credit balance and purchase history</li>
+                         <li>Transaction IDs (processed securely via Apple App Store, Google Play Store, and RevenueCat)</li>
+                         <li><strong>Note: We do NOT store your raw credit card information</strong></li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">2.5 Analytics Data</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>App usage patterns</li>
+                         <li>Feature engagement metrics</li>
+                         <li>Session duration and frequency</li>
+                         <li>Navigation paths within the app</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">3. HOW WE USE YOUR DATA</h3>
+                     <p>We use your data for the following legitimate purposes:</p>
+                     
+                     <h4 class="font-bold text-white mt-4">3.1 Service Delivery</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>To provide and maintain our AI generation service</li>
+                         <li>To process your requests and generate content</li>
+                         <li>To manage your account and credits</li>
+                         <li>To enable content synchronization across devices</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">3.2 App Improvement</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>To monitor usage trends and identify popular features</li>
+                         <li>To detect and fix crashes via Firebase Crashlytics</li>
+                         <li>To optimize AI model performance</li>
+                         <li>To improve user experience and interface design</li>
+                     </ul>
+                     
+                     <h4 class="font-bold text-white mt-4">3.3 Account and Subscription Management</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                        <li>To manage your subscription and process payments</li>
+                        <li>To restore purchases across devices</li>
+                        <li>To send transactional notifications (generation completion, low credits, etc.)</li>
+                        <li>To sync your generated history and favorites</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">3.4 Customer Support</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                        <li>To respond to your questions and requests</li>
+                        <li>To troubleshoot technical issues</li>
+                        <li>To investigate and resolve complaints</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">3.5 Legal Compliance</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                        <li>To comply with applicable laws and regulations</li>
+                        <li>To enforce our Terms of Service</li>
+                        <li>To protect our rights and prevent misuse</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">4. THIRD-PARTY SERVICES</h3>
+                     <p>To operate Onyx, we share strictly necessary data with trusted third-party service providers:</p>
+
+                     <h4 class="font-bold text-white mt-4">4.1 Google Firebase</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Firebase Authentication (secure login)</li>
+                         <li>Cloud Firestore (database for user data and content)</li>
+                         <li>Firebase Storage (image and video file storage)</li>
+                         <li>Firebase Crashlytics (crash reporting)</li>
+                         <li>Firebase Analytics (usage analytics)</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">4.2 RevenueCat</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Subscription management and validation</li>
+                         <li>Receives: transaction data, subscription status</li>
+                         <li>Privacy Policy: <a href="https://www.revenuecat.com/privacy" class="text-cherry hover:underline" target="_blank">https://www.revenuecat.com/privacy</a></li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">4.3 Apple App Store / Google Play Store</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Payment processing</li>
+                         <li>Subscription management</li>
+                         <li>We do NOT have access to your payment card details</li>
+                     </ul>
+                     
+                     <p class="mt-4 font-bold text-white bg-white/5 p-2 rounded border-l-2 border-cherry">IMPORTANT: We do NOT sell, trade, or rent your personal identification information to third parties for marketing purposes.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">5. DATA STORAGE AND SECURITY</h3>
+                     
+                     <h4 class="font-bold text-white mt-4">5.1 Where We Store Your Data</h4>
+                     <p>Your data is stored on secure servers provided by Google Firebase, with servers located in various regions globally to ensure optimal performance.</p>
+
+                     <h4 class="font-bold text-white mt-4">5.2 Security Measures</h4>
+                     <p>We implement industry-standard security measures including:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Encrypted data transmission (HTTPS/TLS)</li>
+                         <li>Secure authentication (Firebase Auth)</li>
+                         <li>Access controls and monitoring</li>
+                         <li>Regular security audits</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">5.3 Security Limitations</h4>
+                     <p>Please be aware that no method of transmission over the internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your personal data, we cannot guarantee its absolute security.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">6. DATA RETENTION</h3>
+                     <p>We retain your personal data and generated content:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li><strong>Active Accounts:</strong> For as long as your account remains active</li>
+                         <li><strong>Deleted Accounts:</strong> Data is permanently deleted within 30 days of account deletion</li>
+                         <li><strong>Legal Requirements:</strong> We may retain certain data longer if required by law</li>
+                     </ul>
+                     <p class="mt-2">Generated content (images/videos) is stored permanently until you delete your account or manually delete specific items.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">7. YOUR PRIVACY RIGHTS</h3>
+                     <p>You have the following rights regarding your data:</p>
+
+                     <h4 class="font-bold text-white mt-4">7.1 Access and Export</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>View all your generated content in the app</li>
+                         <li>Request a copy of your personal data</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">7.2 Correction</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Update your email address or profile settings</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">7.3 Deletion</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Delete individual generated images/videos</li>
+                         <li>Delete your entire account and all associated data via Settings > Delete Account</li>
+                         <li><strong>Effect:</strong> This action is PERMANENT and IRREVERSIBLE. All data (including generated videos, images, and remaining credits) is immediately removed from our servers.</li>
+                     </ul>
+                     
+                     <div class="mt-4 p-4 bg-cherry/10 border border-cherry/30 rounded-lg">
+                        <p class="font-bold text-white mb-2">Account Deletion Request via Email</p>
+                        <p>If you are unable to access the mobile application or prefer to request deletion via email, you must send a request to:</p>
+                        <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry font-bold hover:underline block mt-2">onyx.ai.helpcenter@gmail.com</a>
+                        <p class="text-xs text-gray-400 mt-2">Please include "Account Deletion Request" in the subject line and provide your registered email address or User ID. We will process your data deletion request within 30 days in compliance with applicable laws.</p>
+                     </div>
+
+                     <h4 class="font-bold text-white mt-4">7.4 Objection</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Disable analytics tracking</li>
+                         <li>Unsubscribe from promotional notifications</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">7.5 Data Portability</h4>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Download your generated content before account deletion</li>
+                     </ul>
+                     <p class="mt-2">To exercise these rights, contact us at: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">8. CHILDREN'S PRIVACY</h3>
+                     <p>Onyx is restricted to users aged 18 and older. We do not knowingly collect personal data from children under 18. If we become aware that we have collected personal data from a child under 18, we will take immediate steps to delete that information from our servers. If you are a parent or guardian and believe your child has provided us with personal data, please contact us immediately.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">9. INTERNATIONAL DATA TRANSFERS</h3>
+                     <p>Your data may be transferred to and processed in countries other than your country of residence. These countries may have different data protection laws. By using Onyx, you consent to the transfer of your data to countries outside your jurisdiction, including countries that may not provide the same level of data protection as your home country.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">10. COOKIES AND TRACKING</h3>
+                     <p>Onyx does not use cookies in the traditional web sense. However, we use:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Device identifiers for analytics</li>
+                         <li>Session tokens for authentication</li>
+                         <li>Local storage for app preferences</li>
+                     </ul>
+                     <p class="mt-2">You can reset your device identifier by reinstalling the app, though this will log you out.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">11. THIRD-PARTY LINKS</h3>
+                     <p>Our Service may contain links to third-party websites or services (e.g., help documentation, social media). We are not responsible for the privacy practices of these third parties. We encourage you to read their privacy policies.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">12. CALIFORNIA PRIVACY RIGHTS (CCPA)</h3>
+                     <p>If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA):</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Right to know what personal information is collected</li>
+                         <li>Right to delete personal information</li>
+                         <li>Right to opt-out of sale (Note: we do NOT sell personal information)</li>
+                     </ul>
+                     <p class="mt-2">To exercise these rights, email: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">13. EUROPEAN PRIVACY RIGHTS (GDPR)</h3>
+                     <p>If you are located in the European Economic Area (EEA), you have rights under the General Data Protection Regulation (GDPR) including:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Right to access, rectify, or erase your data</li>
+                         <li>Right to restrict or object to processing</li>
+                         <li>Right to data portability</li>
+                         <li>Right to withdraw consent</li>
+                         <li>Right to lodge a complaint with a supervisory authority</li>
+                     </ul>
+                     <p class="mt-2 font-semibold">Legal Basis for Processing:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Contractual necessity (to provide the service)</li>
+                         <li>Legitimate interests (app improvement, security)</li>
+                         <li>Consent (marketing communications, if applicable)</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">14. CHANGES TO THIS PRIVACY POLICY</h3>
+                     <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. We will notify you of any material changes by:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Posting the new Privacy Policy in the app</li>
+                         <li>Updating the "Last Updated" date</li>
+                         <li>Sending an in-app notification (for significant changes)</li>
+                     </ul>
+                     <p class="mt-2">Your continued use of Onyx after changes become effective constitutes acceptance of the revised policy.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">15. CONTACT US</h3>
+                     <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+                     <p class="mt-2">Email: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+                     <p class="mt-2 text-sm text-gray-500">We will respond to your inquiry within 30 days.</p>
+                 </div>
+
+                <div class="mt-12 pt-8 border-t border-white/10 flex flex-col items-center opacity-50">
+                    <img src="icon.png" class="w-10 h-10 opacity-50 grayscale mb-2">
+                    <p class="text-xs uppercase tracking-widest">Onyx AI Legal Department</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal('termsModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl flex flex-col m-4 overflow-hidden">
+            
+             <div class="absolute inset-0 bg-gradient-to-b from-blue-900/5 to-transparent pointer-events-none"></div>
+             <i class="fas fa-file-contract modal-watermark"></i>
+
+             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-6 bg-cherry rounded-full"></div>
+                    <h2 class="text-xl font-bold text-white tracking-widest uppercase">Terms & EULA</h2>
+                </div>
+                <button onclick="closeModal('termsModal')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-cherry transition-all"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="p-8 overflow-y-auto text-gray-300 leading-relaxed space-y-6 font-light text-sm relative z-10 custom-scrollbar">
+                <div class="bg-white/5 p-4 rounded-lg border border-white/5 mb-6">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Last Updated</p>
+                    <p class="text-white font-mono">January 2026</p>
+                </div>
+
+                 <p class="italic text-gray-500 font-bold">PLEASE READ THESE TERMS CAREFULLY BEFORE USING ONYX</p>
+
+                 <div class="prose prose-invert prose-sm max-w-none">
+                     <p>These Terms of Service ("Terms", "Agreement") constitute a legally binding agreement between you ("User", "you") and Onyx ("we", "us", "our") governing your access to and use of the Onyx mobile application (the "Service", "App").</p>
+                     <p>By downloading, installing, accessing, or using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you disagree with any part of these Terms, you must not access or use the Service.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">1. ACCEPTANCE OF TERMS</h3>
+                     <p>By creating an account or using Onyx, you:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Confirm you are at least 18 years of age</li>
+                         <li>Agree to comply with all applicable laws and regulations</li>
+                         <li>Accept these Terms and our Privacy Policy</li>
+                         <li>Acknowledge that AI-generated content may vary in quality</li>
+                         <li>Understand that all purchases are final and non-refundable</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">2. AGE RESTRICTION AND ELIGIBILITY</h3>
+                     <p>You must be at least 18 years old to use Onyx. By using the Service, you represent and warrant that:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>You are at least 18 years of age</li>
+                         <li>You have the legal capacity to enter into this Agreement</li>
+                         <li>You are not barred from using the Service under applicable law</li>
+                     </ul>
+                     <p class="mt-2">We reserve the right to request proof of age at any time. Failure to meet age requirements will result in immediate account termination without refund.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">3. LICENSE GRANT</h3>
+                     <p>Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Download and install the App on devices you own or control</li>
+                         <li>Access and use the Service for personal, non-commercial purposes (unless you have a commercial license)</li>
+                     </ul>
+                     <p class="mt-2 font-semibold">You may NOT:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Copy, modify, or create derivative works of the App</li>
+                         <li>Reverse engineer, decompile, or disassemble the App</li>
+                         <li>Rent, lease, lend, sell, or sublicense the App</li>
+                         <li>Remove or alter any proprietary notices or labels</li>
+                         <li>Use the App for any unlawful purpose</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">4. ACCOUNT REGISTRATION AND SECURITY</h3>
+                     <h4 class="font-bold text-white mt-4">4.1 Account Creation</h4>
+                     <p>You must create an account to use certain features. You agree to:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Provide accurate and complete information</li>
+                         <li>Maintain the security of your account credentials</li>
+                         <li>Notify us immediately of any unauthorized access</li>
+                         <li>Be responsible for all activities under your account</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">4.2 Account Suspension</h4>
+                     <p>We reserve the right to suspend or terminate your account if:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>You violate these Terms</li>
+                         <li>You engage in fraudulent activity</li>
+                         <li>You generate prohibited content</li>
+                         <li>Your payment method fails or is disputed</li>
+                     </ul>
+
+                     <div class="border-2 border-cherry/50 p-4 rounded bg-cherry/5 mt-8">
+                         <h3 class="text-lg font-bold text-cherry mb-4">5. SUBSCRIPTIONS, CREDITS, AND PAYMENTS (IMPORTANT)</h3>
+                         <p class="font-bold mb-2">PLEASE READ THIS SECTION CAREFULLY AS IT CONTAINS CRITICAL FINANCIAL TERMS:</p>
+                         
+                         <h4 class="font-bold text-white mt-4">5.1 Subscription Plans</h4>
+                         <p>Onyx offers the following subscription tiers:</p>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>Weekly Plan: Auto-renews every 7 days</li>
+                             <li>Monthly Plan: Auto-renews every 30 days</li>
+                             <li>Yearly Plan: Auto-renews every 365 days</li>
+                         </ul>
+
+                         <h4 class="font-bold text-white mt-4">5.2 No Free Trial</h4>
+                         <p>Onyx does NOT offer a free trial period. You will be charged immediately upon confirmation of your purchase via Apple App Store or Google Play Store.</p>
+
+                         <h4 class="font-bold text-white mt-4">5.3 Payment Processing</h4>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>Payments are processed by Apple Inc. (iOS) or Google LLC (Android)</li>
+                             <li>Billing occurs at the start of each subscription period</li>
+                             <li>Prices are subject to change with 30 days notice</li>
+                             <li>Taxes (including VAT) may apply based on your jurisdiction</li>
+                         </ul>
+                         
+                         <h4 class="font-bold text-white mt-4">5.4 Credits System</h4>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>Credits are virtual currency used to generate content</li>
+                             <li>1 image generation = 3-8 credits (depending on settings)</li>
+                             <li>1 video generation = 20-50 credits (depending on duration and settings)</li>
+                             <li>Credits do not expire as long as your account is active</li>
+                             <li>Credits have no cash value and cannot be refunded</li>
+                         </ul>
+
+                         <h4 class="font-bold text-cherry mt-4">5.5 FINAL SALE - NO REFUNDS POLICY</h4>
+                         <p class="font-bold">ALL PURCHASES ARE FINAL AND NON-REFUNDABLE, including but not limited to:</p>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>Weekly, monthly, or yearly subscriptions</li>
+                             <li>Credit packs or bundles</li>
+                             <li>In-app purchases of any kind</li>
+                         </ul>
+
+                         <h4 class="font-bold text-white mt-4">5.6 No Refunds for AI Output</h4>
+                         <p>You acknowledge and agree that:</p>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>AI generation is experimental and results may vary</li>
+                             <li>Content quality depends on prompt clarity and AI limitations</li>
+                             <li>Dissatisfaction with artistic style, quality, accuracy, or appearance of AI-generated output does NOT entitle you to a refund</li>
+                             <li>Failed generations (due to technical errors on our end) may be credited back to your account at our discretion</li>
+                         </ul>
+
+                         <h4 class="font-bold text-white mt-4">5.7 Cancellation Policy</h4>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>You may cancel your subscription at any time through your Apple ID or Google Play Store account settings</li>
+                             <li>Cancellation takes effect at the end of the current billing period</li>
+                             <li>You will retain access to paid features until the subscription expires</li>
+                             <li>No partial refunds are provided for unused time</li>
+                             <li>Upon cancellation, unused credits remain available until account deletion</li>
+                         </ul>
+                         
+                         <h4 class="font-bold text-white mt-4">5.8 Subscription Renewal</h4>
+                         <ul class="list-disc pl-5 space-y-1">
+                             <li>Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period</li>
+                             <li>Your payment method will be charged for renewal within 24 hours prior to the end of the current period</li>
+                             <li>You can manage auto-renewal in your device's account settings</li>
+                         </ul>
+                     </div>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">6. PROHIBITED CONTENT (ZERO TOLERANCE POLICY)</h3>
+                     <p>Onyx utilizes advanced Artificial Intelligence. We maintain a STRICT ZERO TOLERANCE policy against harmful, illegal, or unethical content generation.</p>
+
+                     <h4 class="font-bold text-white mt-4">6.1 Prohibited Content Categories</h4>
+                     <p>You agree NOT to use the Service to generate, attempt to generate, upload, or share content that includes:</p>
+                     
+                     <div class="grid md:grid-cols-2 gap-4 mt-4">
+                         <div class="bg-white/5 p-3 rounded">
+                             <strong class="text-cherry block mb-1">NSFW/Adult Content:</strong>
+                             <ul class="list-disc pl-4 text-xs">
+                                 <li>Nudity, pornography, or sexually explicit material</li>
+                                 <li>Sexually suggestive content or sexual acts</li>
+                                 <li>Content depicting minors in any inappropriate context</li>
+                             </ul>
+                         </div>
+                         <div class="bg-white/5 p-3 rounded">
+                             <strong class="text-cherry block mb-1">Violence & Gore:</strong>
+                             <ul class="list-disc pl-4 text-xs">
+                                 <li>Graphic violence, extreme gore, or mutilation</li>
+                                 <li>Self-harm, suicide, or promotion thereof</li>
+                                 <li>Torture, abuse, or cruelty to humans or animals</li>
+                             </ul>
+                         </div>
+                         <div class="bg-white/5 p-3 rounded">
+                             <strong class="text-cherry block mb-1">Hate Speech:</strong>
+                             <ul class="list-disc pl-4 text-xs">
+                                 <li>Content promoting racism, sexism, homophobia, or bigotry</li>
+                                 <li>Hate symbols, slurs, or derogatory content</li>
+                                 <li>Content inciting violence or hatred against any group</li>
+                             </ul>
+                         </div>
+                         <div class="bg-white/5 p-3 rounded">
+                             <strong class="text-cherry block mb-1">Illegal Activities:</strong>
+                             <ul class="list-disc pl-4 text-xs">
+                                 <li>Drug manufacturing, trafficking, or abuse</li>
+                                 <li>Weapons, explosives, or dangerous materials</li>
+                                 <li>Fraud, hacking, or other criminal activities</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                     <h4 class="font-bold text-white mt-4">6.2 Violation Consequences</h4>
+                     <p>ANY user found violating this policy will face:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Immediate and permanent account termination</li>
+                         <li>No refunds for remaining credits or active subscriptions</li>
+                         <li>Potential reporting to law enforcement authorities for illegal content</li>
+                         <li>Legal action if applicable</li>
+                     </ul>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">7. INTELLECTUAL PROPERTY RIGHTS</h3>
+                     <h4 class="font-bold text-white mt-4">7.1 Your Generated Content</h4>
+                     <p>Subject to your full compliance with these Terms and payment of all applicable fees, you own the intellectual property rights to the images and videos you generate using Onyx, to the extent permitted by law. However, you acknowledge that:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>AI models are trained on diverse datasets</li>
+                         <li>Generated content may inadvertently resemble existing works</li>
+                         <li>You are solely responsible for ensuring your use does not infringe third-party rights</li>
+                         <li>We provide no warranty that your content is free from third-party claims</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">7.2 License to Onyx</h4>
+                     <p>By generating content, you grant Onyx a limited, non-exclusive, worldwide license to:</p>
+                     <ul class="list-disc pl-5 space-y-1">
+                         <li>Store and display your content within your account</li>
+                         <li>Use anonymized content data to improve AI models</li>
+                         <li>Display your content for promotional purposes (only if you opt-in)</li>
+                     </ul>
+
+                     <h4 class="font-bold text-white mt-4">7.3 Onyx Service Rights</h4>
+                     <p>The Onyx app, including but not limited to source code, design, user interface, trademarks, logos, branding, original features and functionality, AI model integrations and algorithms are and will remain the exclusive property of Onyx and its licensors. You acquire no ownership rights by using the Service.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">8. DISCLAIMER OF WARRANTIES</h3>
+                     <p class="uppercase font-bold text-gray-400">THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.</p>
+                     <p>We specifically DISCLAIM all warranties including, but not limited to merchantability, fitness for a particular purpose, accuracy, reliability, or completeness of AI-generated content. You acknowledge that AI-generated content may be historically inaccurate, physically incorrect, or contain artifacts, and you use the Service at your own risk.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">9. LIMITATION OF LIABILITY</h3>
+                     <p class="uppercase font-bold text-gray-400">TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL ONYX BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">10. INDEMNIFICATION</h3>
+                     <p>You agree to indemnify, defend, and hold harmless Onyx and its affiliates from any claims, liabilities, damages, losses, costs, or expenses arising from your use of the Service, your generated content, or your violation of these Terms.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">11. ACCOUNT TERMINATION</h3>
+                     <h4 class="font-bold text-white mt-4">11.1 Termination by You</h4>
+                     <p>You may terminate your account at any time by going to Settings > Delete Account. Account deletion is PERMANENT and IRREVERSIBLE.</p>
+                     
+                     <h4 class="font-bold text-white mt-4">11.2 Termination by Us</h4>
+                     <p>We may suspend or terminate your account immediately, without prior notice or liability, if you breach these Terms (especially Section 6 regarding prohibited content).</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">12. DISPUTE RESOLUTION AND ARBITRATION</h3>
+                     <p>Before filing a claim, you agree to contact us at <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a> to attempt to resolve the dispute informally for at least 30 days. You agree to resolve disputes with Onyx on an individual basis and waive your right to participate in class actions.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">13. CHANGES TO TERMS</h3>
+                     <p>We reserve the right to modify these Terms at any time. We will notify you of material changes. Your continued use of the Service after changes become effective constitutes acceptance of the revised Terms.</p>
+
+                     <h3 class="text-lg font-bold text-white mt-8 mb-4">17. CONTACT INFORMATION</h3>
+                     <p>If you have any questions, concerns, or requests regarding these Terms of Service, please contact us:</p>
+                     <p class="mt-2">Email: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+                 </div>
+
+                 <div class="mt-12 pt-8 border-t border-white/10 flex flex-col items-center opacity-50">
+                    <div class="border border-white/30 px-4 py-1 rounded mb-2 text-[10px] tracking-widest uppercase">Official Document</div>
+                    <p class="text-xs text-gray-600">Onyx AI Inc.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('contactModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-md p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center m-4">
+            <div class="w-16 h-16 bg-cherry/10 rounded-full flex items-center justify-center mb-4 text-cherry">
+                <i class="fas fa-envelope text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">Contact Us</h3>
+            <p class="text-gray-400 mb-6 text-sm">Reach out to our support team via email.</p>
+            
+            <div class="w-full bg-white/5 border border-white/10 rounded-lg p-4 mb-6 flex items-center justify-between gap-2 group hover:border-cherry/50 transition-colors">
+                <span class="text-white/80 font-mono text-xs sm:text-sm truncate select-all" id="contactEmail">onyx.ai.helpcenter@gmail.com</span>
+                <button onclick="copyEmail()" class="text-gray-400 hover:text-white transition-colors relative" title="Copy">
+                    <i class="fas fa-copy"></i>
+                    <span id="copyFeedback" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-cherry text-white text-[10px] px-2 py-1 rounded opacity-0 transition-opacity whitespace-nowrap">Copied!</span>
+                </button>
+            </div>
+            
+            <div class="flex gap-4 w-full">
+                <button onclick="closeModal('contactModal')" class="flex-1 py-3 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-colors font-medium border border-white/5">Close</button>
+                <a href="mailto:onyx.ai.helpcenter@gmail.com" class="flex-1 py-3 rounded-xl bg-cherry text-white hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-bold shadow-[0_0_15px_rgba(210,4,45,0.4)]">
+                    <i class="fas fa-paper-plane text-xs"></i> Open Mail App
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 1000, easing: 'ease-out-cubic' });
+        // Mevcut script etiketinin içine ekle
+        window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#privacy') openModal('privacyModal');
+            if (window.location.hash === '#terms') openModal('termsModal');
+        });
+
+        // Sayfa ilk açıldığında kontrol etmesi için:
+        if (window.location.hash === '#privacy') openModal('privacyModal');
+        if (window.location.hash === '#terms') openModal('termsModal');
+        
+        // Intro handling
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const intro = document.getElementById('intro-overlay');
+                if(intro) {
+                    intro.style.display = 'none';
+                    AOS.refresh();
+                }
+            }, 4500); 
+
+            // Check for URL parameters to open specific modals
+            const urlParams = new URLSearchParams(window.location.search);
+            const modalParam = urlParams.get('modal');
+
+            if (modalParam === 'privacy') {
+                openModal('privacyModal');
+            } else if (modalParam === 'terms') {
+                openModal('termsModal');
+            }
+        });
+
+        // Modal Logic
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.remove('modal-hidden');
+            modal.classList.add('modal-active');
+            document.body.style.overflow = 'hidden'; 
+        }
+        // URL'deki # değişimlerini izleyen fonksiyon
+        function handleRouting() {
+            const hash = window.location.hash;
+            if (hash === '#privacy') {
+                openModal('privacyModal');
+            } else if (hash === '#terms') {
+                openModal('termsModal');
+            }
+        }
+
+        // Sayfa yüklendiğinde ve linke tıklandığında çalıştır
+        window.addEventListener('hashchange', handleRouting);
+        window.addEventListener('load', handleRouting);
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.remove('modal-active');
+            modal.classList.add('modal-hidden');
+            document.body.style.overflow = 'auto'; 
+            // Modal kapanınca URL'yi temizler (onyxgen.dev haline getirir)
+            history.pushState("", document.title, window.location.pathname);
+        }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") { 
+                closeModal('privacyModal'); 
+                closeModal('termsModal');
+                closeModal('contactModal');
+                closeModal('aiGeneratorModal');
+                closeModal('pricingModal');
+                closeModal('aboutModal');
+                closeModal('blogModal'); 
+                closeStyleView(); 
+            }
+        });
+
+        // Copy Email Logic
+        function copyEmail() {
+            const emailText = document.getElementById('contactEmail').innerText;
+            navigator.clipboard.writeText(emailText).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.style.opacity = '1';
+                setTimeout(() => {
+                    feedback.style.opacity = '0';
+                }, 2000);
+            });
+        }
+
+        // Accordion Logic
+        function toggleAccordion(element) {
+            const parent = element.parentElement;
+            const wasOpen = parent.classList.contains('accordion-open');
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('accordion-open');
+                const icon = item.querySelector('.accordion-icon');
+                if(icon) { 
+                    icon.classList.remove('fa-minus');
+                    icon.classList.add('fa-plus');
+                }
+            });
+            if (!wasOpen) {
+                parent.classList.add('accordion-open');
+                const icon = element.querySelector('.accordion-icon');
+                if(icon) {
+                    icon.classList.remove('fa-plus');
+                    icon.classList.add('fa-minus');
+                }
+            }
+        }
+
+        // Mobile Menu Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', function(e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+        
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursorOutline.style.backgroundColor = 'rgba(210, 4, 45, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // --- PAGE VIEW LOGIC ---
+        function openStyleView() {
+            const view = document.getElementById('style-library-view');
+            const mainContent = document.getElementById('main-content');
+            
+            view.classList.remove('closed');
+            view.classList.add('open');
+            mainContent.style.filter = "blur(5px)";
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeStyleView() {
+            const view = document.getElementById('style-library-view');
+            const mainContent = document.getElementById('main-content');
+            
+            view.classList.remove('open');
+            view.classList.add('closed');
+            mainContent.style.filter = "none";
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- STYLE LIBRARY DATA (From Flutter App) ---
+        const styles = [
+             // === NO STYLE (DEFAULT) ===
+            { name: "No Style", category: "transformation", icon: "fa-image", color: "#9E9E9E", image: "noStyle.png" },
+
+            // === TRANSFORMATION EFFECTS ===
+            { name: "Yellow Cartoon", category: "transformation", icon: "fa-tv", color: "#FDD835", image: "yellowCartton.png" },
+            { name: "Blue Alien", category: "transformation", icon: "fa-user-astronaut", color: "#00BCD4", image: "blueAlien.png" },
+            { name: "Baby Face", category: "transformation", icon: "fa-baby", color: "#FF80AB", image: "babyFace.png" },
+            { name: "Oldify", category: "transformation", icon: "fa-hourglass-half", color: "#8D6E63", image: "oldify.png" },
+            { name: "Zombie", category: "transformation", icon: "fa-mask", color: "#4CAF50", image: "zombie.png" },
+            { name: "Animated 3D", category: "transformation", icon: "fa-gamepad", color: "#2196F3", image: "3dAnimated.png" },
+            { name: "Superhero", category: "transformation", icon: "fa-bolt-lightning", color: "#FF0000", image: "superHero.png" },
+            { name: "Blocky Voxel", category: "transformation", icon: "fa-cube", color: "#8B4513", image: "voxelArt.jpg" },
+            { name: "Brick Toy", category: "transformation", icon: "fa-puzzle-piece", color: "#FFEB3B", image: "brickToy.png" },
+            { name: "Vampire", category: "transformation", icon: "fa-moon", color: "#8B0000", image: "vampire.png" },
+            { name: "Mermaid", category: "transformation", icon: "fa-water", color: "#00CED1", image: "mermaid.jpg" },
+            { name: "Steampunk", category: "transformation", icon: "fa-gears", color: "#CD7F32", image: "steampunk.png" },
+            { name: "Cyborg", category: "transformation", icon: "fa-robot", color: "#708090", image: "cyborg.jpg" },
+            { name: "Angel", category: "transformation", icon: "fa-feather", color: "#FFFFFF", image: "angel.png" },
+            { name: "Demon", category: "transformation", icon: "fa-fire", color: "#8B0000", image: "demon.png" },
+            { name: "Werewolf", category: "transformation", icon: "fa-paw", color: "#8B4513", image: "warewolf.png" },
+            { name: "Fire Elemental", category: "transformation", icon: "fa-fire-flame-curved", color: "#FF4500", image: "fireElemental.jpg" },
+            { name: "Ice Frozen", category: "transformation", icon: "fa-snowflake", color: "#87CEEB", image: "iceFrozen.png" },
+            { name: "Nature Spirit", category: "transformation", icon: "fa-tree", color: "#228B22", image: "natureSpirit.jpg" },
+            { name: "Robot Mecha", category: "transformation", icon: "fa-robot", color: "#708090", image: "robotMecha.jpg" },
+            { name: "Pirate", category: "transformation", icon: "fa-anchor", color: "#8B4513", image: "pirate.jpg" },
+            { name: "Astronaut", category: "transformation", icon: "fa-rocket", color: "#FFFFFF", image: "astronaut.jpg" },
+            { name: "Hug", category: "transformation", icon: "fa-heart", color: "#FF1744", image: "hug.jpg" },
+
+            // === ARTISTIC STYLES ===
+            { name: "Realistic", category: "artistic", icon: "fa-camera", color: "#607D8B", image: "realistic.png" },
+            { name: "Anime", category: "artistic", icon: "fa-paintbrush", color: "#FF4081", image: "anime.png" },
+            { name: "Edit Image", category: "artistic", icon: "fa-pen", color: "#00ACC1", image: "edit.jpg" },
+            { name: "Oil Paint", category: "artistic", icon: "fa-palette", color: "#8D6E63", image: "oilPainting.jpg" },
+            { name: "Watercolor", category: "artistic", icon: "fa-droplet", color: "#9C27B0", image: "watercolor.jpg" },
+            { name: "Pop Art", category: "artistic", icon: "fa-wand-magic-sparkles", color: "#E91E63", image: "popArt.jpg" },
+            { name: "3D Render", category: "artistic", icon: "fa-cube", color: "#9C27B0", image: "3dRendered.jpg" },
+            { name: "Claymation", category: "artistic", icon: "fa-paw", color: "#FF5722", image: "Claymation.jpg" },
+            { name: "Graffiti", category: "artistic", icon: "fa-spray-can", color: "#FF00FF", image: "graffiti.jpg" },
+            { name: "Neon Art", category: "artistic", icon: "fa-lightbulb", color: "#FF1493", image: "neonArt.jpg" },
+            { name: "Sketch", category: "artistic", icon: "fa-pencil", color: "#696969", image: "sketch.jpg" },
+            { name: "Comic Book", category: "artistic", icon: "fa-book-open", color: "#FFD700", image: "comicBook.jpg" },
+            { name: "Stained Glass", category: "artistic", icon: "fa-church", color: "#4169E1", image: "staniedGlass.jpg" },
+            { name: "Low Poly", category: "artistic", icon: "fa-shapes", color: "#00FFFF", image: "lowPoly.jpg" },
+            { name: "Origami", category: "artistic", icon: "fa-layer-group", color: "#FF6347", image: "origami.jpg" },
+            { name: "Vaporwave", category: "artistic", icon: "fa-water", color: "#FF1493", image: "vaporwave.jpg" },
+            { name: "Retro VHS", category: "artistic", icon: "fa-video", color: "#FF00FF", image: "retroVHS.jpg" },
+            { name: "Holographic", category: "artistic", icon: "fa-ghost", color: "#00FFFF", image: "Holographic.jpg" },
+            { name: "Crystal", category: "artistic", icon: "fa-gem", color: "#9370DB", image: "crystal.jpg" },
+            { name: "Mosaic", category: "artistic", icon: "fa-border-all", color: "#DAA520", image: "mosaic.jpg" },
+            { name: "Pixel Art", category: "artistic", icon: "fa-gamepad", color: "#32CD32", image: "pixelArt.jpg" },
+
+            // === CINEMATIC STYLES ===
+            { name: "Cinematic", category: "cinematic", icon: "fa-film", color: "#D2042D", image: "cinematic.jpg" },
+            { name: "Film Noir", category: "cinematic", icon: "fa-masks-theater", color: "#424242", image: "noir.jpg" },
+            { name: "Cyberpunk", category: "cinematic", icon: "fa-bolt", color: "#00BCD4", image: "cyberpunk.png" },
+            { name: "Horror", category: "cinematic", icon: "fa-moon", color: "#212121", image: "horror.jpg" },
+            { name: "Western", category: "cinematic", icon: "fa-hat-cowboy", color: "#D2691E", image: "western.jpg" },
+            { name: "Kung Fu", category: "cinematic", icon: "fa-hand-fist", color: "#FF4500", image: "kungFu.jpg" },
+            { name: "Samurai", category: "cinematic", icon: "fa-shield-halved", color: "#8B0000", image: "samurai.jpg" },
+            { name: "Space Opera", category: "cinematic", icon: "fa-rocket", color: "#191970", image: "spaceOpera.jpg" },
+            { name: "Zombie Apocalypse", category: "cinematic", icon: "fa-biohazard", color: "#556B2F", image: "ZombieApocalypse.jpg" },
+            { name: "Detective", category: "cinematic", icon: "fa-magnifying-glass", color: "#2F4F4F", image: "detective.jpg" },
+            { name: "Disco", category: "cinematic", icon: "fa-compact-disc", color: "#FFD700", image: "disco.jpg" },
+            { name: "Mad Scientist", category: "cinematic", icon: "fa-flask", color: "#00FF00", image: "MadScientist.jpg" },
+            { name: "Outlaw", category: "cinematic", icon: "fa-skull-crossbones", color: "#8B4513", image: "outlaw.jpg" },
+
+            // === FANTASY STYLES ===
+            { name: "Fantasy", category: "fantasy", icon: "fa-hat-wizard", color: "#FFB300", image: "fantasy.jpg" },
+            { name: "Power Fighter", category: "fantasy", icon: "fa-bolt-lightning", color: "#FFC107", image: "powerFighter.jpg" },
+            { name: "Whimsical Anime", category: "fantasy", icon: "fa-cloud", color: "#4CAF50", image: "WhimsicalAnime.jpg" },
+            { name: "Wizard", category: "fantasy", icon: "fa-wand-sparkles", color: "#800080", image: "wizard.jpg" },
+            { name: "Epic Fantasy", category: "fantasy", icon: "fa-dungeon", color: "#228B22", image: "epicFantasy.jpg" },
+            { name: "Fairy Tale", category: "fantasy", icon: "fa-wand-magic-sparkles", color: "#FFB6C1", image: "fairyTale.jpg" },
+            { name: "Greek Gods", category: "fantasy", icon: "fa-landmark", color: "#FFD700", image: "greekGod.jpg" },
+            { name: "Viking", category: "fantasy", icon: "fa-shield-halved", color: "#4682B4", image: "viking.jpg" },
+            { name: "Alien", category: "fantasy", icon: "fa-leaf", color: "#00FF00", image: "blueAlien.png" },
+            { name: "Dragon Rider", category: "fantasy", icon: "fa-dragon", color: "#FF0000", image: "dragonRider.jpg" },
+            { name: "Elven Archer", category: "fantasy", icon: "fa-leaf", color: "#228B22", image: "elvenArcher.jpg" },
+            { name: "Dark Sorcerer", category: "fantasy", icon: "fa-skull", color: "#4B0082", image: "darkSorcerer.jpg" },
+            { name: "Unicorn", category: "fantasy", icon: "fa-star", color: "#FFB6C1", image: "unicorn.jpg" }
+        ];
+
+        function renderStyles(category) {
+            const container = document.getElementById('style-container');
+            container.innerHTML = ''; // clear current
+
+            const filteredStyles = styles.filter(s => s.category === category);
+            
+            const grid = document.createElement('div');
+            // Updated grid to accommodate image cards better (taller aspect ratio)
+            // INCREASED CARD SIZE: Removed lg:grid-cols-5, now max 4 cols.
+            grid.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 style-grid active';
+
+            filteredStyles.forEach((style, index) => {
+                const card = document.createElement('div');
+                // Updated Card Design to show Image
+                // INCREASED HEIGHT: h-48 -> h-80
+                card.className = 'glass-card p-0 rounded-xl overflow-hidden relative group cursor-pointer border border-white/5 h-80 hover:border-cherry/50 transition-all';
+                card.style.animationDelay = `${index * 50}ms`;
+                
+                // Use a placeholder if image fails, otherwise use the filename directly
+                const imgPath = style.image; 
+
+                card.innerHTML = `
+                    <img src="${imgPath}" alt="${style.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/050505/D2042D?text=${encodeURIComponent(style.name)}'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-4 flex flex-col items-center z-10">
+                        <span class="text-sm font-bold uppercase tracking-widest text-center text-white drop-shadow-md border-b border-cherry pb-1">${style.name}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            container.appendChild(grid);
+        }
+
+        function switchTab(category) {
+            document.querySelectorAll('.style-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${category}`).classList.add('active');
+            renderStyles(category);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStyles('transformation');
+        });
+
+    </script>
+</body>
+</html>
