@@ -1974,11 +1974,15 @@
         window.addEventListener('hashchange', function() {
             if (window.location.hash === '#privacy') openModal('privacyModal');
             if (window.location.hash === '#terms') openModal('termsModal');
+            if (window.location.hash === '#refund') openModal('refundModal');
+            if (window.location.hash === '#imprint') openModal('imprintModal');
         });
 
         // Sayfa ilk açıldığında kontrol etmesi için:
         if (window.location.hash === '#privacy') openModal('privacyModal');
         if (window.location.hash === '#terms') openModal('termsModal');
+        if (window.location.hash === '#refund') openModal('refundModal');
+        if (window.location.hash === '#imprint') openModal('imprintModal');
         
         // Intro handling
         window.addEventListener('load', () => {
