@@ -1026,8 +1026,8 @@
                            <!-- Legal başlığı altındaki liste bu şekilde olmalı -->
                             <li><a href="#terms" class="footer-link">Terms of Service</a></li>
                             <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
-                            <li><a href="https://app.onyxgen.dev/#/refund" target="_blank" class="footer-link">Refund Policy</a></li>
-                            <li><a href="https://app.onyxgen.dev/#/contact" target="_blank" class="footer-link">Contact & Imprint</a></li>
+                            <li><button onclick="openModal('refundModal')" class="footer-link text-left">Refund Policy</button></li>
+                            <li><button onclick="openModal('imprintModal')" class="footer-link text-left">Contact & Imprint</button></li>
                         </ul>
                     </div>
                 </div>
@@ -1794,6 +1794,148 @@
                  <div class="mt-12 pt-8 border-t border-white/10 flex flex-col items-center opacity-50">
                     <div class="border border-white/30 px-4 py-1 rounded mb-2 text-[10px] tracking-widest uppercase">Official Document</div>
                     <p class="text-xs text-gray-600">Onyx AI Inc.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="refundModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal('refundModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl flex flex-col m-4 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-cherry/5 to-transparent pointer-events-none"></div>
+            <i class="fas fa-undo-alt modal-watermark"></i>
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-6 bg-cherry rounded-full"></div>
+                    <h2 class="text-xl font-bold text-white tracking-widest uppercase">Refund Policy</h2>
+                </div>
+                <button onclick="closeModal('refundModal')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-cherry transition-all"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-8 overflow-y-auto text-gray-300 leading-relaxed space-y-6 font-light text-sm custom-scrollbar relative z-10">
+                <div class="bg-white/5 p-4 rounded-lg border border-white/5 mb-6">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Last Updated</p>
+                    <p class="text-white font-mono">February 2026</p>
+                </div>
+                <p>Thank you for using Onyx AI. Please read this Refund Policy carefully before purchasing any credits or subscriptions.</p>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">1. Digital Product Nature</h3>
+                    <p>Onyx AI is a digital service that provides AI-generated content (videos, images, 3D models, and audio). Due to the nature of our service as a digital product, all sales are final.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">2. No Refund Policy</h3>
+                    <p>We do not offer refunds for:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                        <li>Credit purchases (one-time or packages)</li>
+                        <li>Subscription plans (monthly or annual)</li>
+                        <li>Already generated content (videos, images, 3D models, audio)</li>
+                        <li>Unused credits or remaining subscription time</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">3. Why We Cannot Offer Refunds</h3>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                        <li>AI generation incurs real-time API costs that we cannot recover</li>
+                        <li>Once content is generated, it has been delivered to you</li>
+                        <li>Credits are consumed immediately upon generation</li>
+                        <li>Our AI models process your requests in real-time with third-party services</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">4. Service Availability</h3>
+                    <p>We strive to provide 99.9% uptime. In rare cases of extended service outages (more than 48 hours), we may consider credit compensation on a case-by-case basis.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">5. Subscription Cancellation</h3>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                        <li>You may cancel your subscription at any time</li>
+                        <li>Cancellation takes effect at the end of your current billing period</li>
+                        <li>You will retain access to subscription benefits until the period ends</li>
+                        <li>No partial refunds are given for early cancellation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">6. Technical Issues & Billing Errors</h3>
+                    <p>If you experience technical problems or notice an incorrect charge, contact us immediately at <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a>. We will investigate and resolve legitimate billing errors.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">7. European Union Consumers</h3>
+                    <p>EU consumers have a 14-day right of withdrawal under the Consumer Rights Directive. However, by using our service and generating content, you expressly agree to waive this right as the digital content has been delivered.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">8. Contact Us</h3>
+                    <p>For questions about this Refund Policy: <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+                    <p class="mt-1">Response time: 24-48 hours</p>
+                </div>
+                <div class="mt-12 pt-8 border-t border-white/10 flex flex-col items-center opacity-50">
+                    <img src="icon.png" class="w-10 h-10 opacity-50 grayscale mb-2">
+                    <p class="text-xs uppercase tracking-widest">Onyx AI Legal Department</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imprintModal" class="fixed inset-0 z-[150] flex items-center justify-center modal-hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal('imprintModal')"></div>
+        <div class="relative bg-onyx border border-white/10 w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl flex flex-col m-4 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-cherry/5 to-transparent pointer-events-none"></div>
+            <i class="fas fa-address-card modal-watermark"></i>
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-6 bg-cherry rounded-full"></div>
+                    <h2 class="text-xl font-bold text-white tracking-widest uppercase">Contact & Imprint</h2>
+                </div>
+                <button onclick="closeModal('imprintModal')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-cherry transition-all"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-8 overflow-y-auto text-gray-300 leading-relaxed space-y-6 font-light text-sm custom-scrollbar relative z-10">
+                <div class="bg-white/5 p-4 rounded-lg border border-white/5 mb-6">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Last Updated</p>
+                    <p class="text-white font-mono">February 2026</p>
+                </div>
+                <p class="text-white font-semibold text-base">Onyx AI — AI Content Generation Platform</p>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 uppercase tracking-wider text-xs">Contact Information</h3>
+                    <div class="bg-white/5 rounded-lg p-4 space-y-2 border border-white/5">
+                        <p><span class="text-gray-500">Email:</span> <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a></p>
+                        <p><span class="text-gray-500">Website:</span> <a href="https://app.onyxgen.dev" target="_blank" class="text-cherry hover:underline">https://app.onyxgen.dev</a></p>
+                        <p><span class="text-gray-500">Response Time:</span> 24-48 hours</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 uppercase tracking-wider text-xs">Physical Address</h3>
+                    <div class="bg-white/5 rounded-lg p-4 border border-white/5">
+                        <p>Guzelyali Burgaz Mah. Bahcivan Sk. 27/A</p>
+                        <p>Mudanya, Bursa, 16950</p>
+                        <p>Turkey</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">Customer Support</h3>
+                    <p>Our support team is available to assist you with technical issues, billing questions, account problems, and general inquiries.</p>
+                    <p class="mt-2"><span class="text-gray-500">Business Hours:</span> Monday – Friday, 9:00 AM – 6:00 PM (EST)</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">Legal Information</h3>
+                    <div class="bg-white/5 rounded-lg p-4 space-y-1 border border-white/5">
+                        <p><span class="text-gray-500">Service Name:</span> Onyx AI</p>
+                        <p><span class="text-gray-500">Hosting:</span> Firebase Hosting (Google LLC)</p>
+                        <p><span class="text-gray-500">Payment Provider:</span> Paddle.com (web)</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">Regulatory Compliance</h3>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                        <li>GDPR (General Data Protection Regulation)</li>
+                        <li>CCPA (California Consumer Privacy Act)</li>
+                        <li>PCI-DSS (Payment Card Industry Data Security Standard)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-2 uppercase tracking-wider text-xs">Dispute Resolution</h3>
+                    <p>For any disputes, please contact us first at <a href="mailto:onyx.ai.helpcenter@gmail.com" class="text-cherry hover:underline">onyx.ai.helpcenter@gmail.com</a>. We aim to resolve all issues amicably and promptly.</p>
+                </div>
+                <div class="mt-12 pt-8 border-t border-white/10 flex flex-col items-center opacity-50">
+                    <img src="icon.png" class="w-10 h-10 opacity-50 grayscale mb-2">
+                    <p class="text-xs uppercase tracking-widest">Onyx AI Legal Department</p>
                 </div>
             </div>
         </div>
