@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Templates — Onyx</title>
+
+    <link rel="icon" type="image/png" href="websiteIcon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        onyx: '#050505',
+                        onyxlight: '#0F0F0F',
+                        cherry: '#D2042D',
+                        cherrydark: '#8B0000',
+                    },
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: white; overflow-x: hidden; cursor: none; }
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #D2042D; }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(210, 4, 45, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D2042D; }
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff 20%, #D2042D 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .footer-link { color: inherit; transition: color 0.2s; }
+        .footer-link:hover { color: white; }
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 9999px; font-size: 10px; background: rgba(255,255,255,0.06); color: #9ca3af; }
+        .btn-cherry {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; background: #D2042D; color: white;
+            font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
+            border-radius: 9999px; transition: all 0.3s;
+            box-shadow: 0 0 25px rgba(210,4,45,0.35);
+        }
+        .btn-cherry:hover { background: #b00025; transform: scale(1.04); box-shadow: 0 0 35px rgba(210,4,45,0.55); }
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border: 1px solid rgba(255,255,255,0.12); color: white;
+            font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
+            border-radius: 9999px; transition: all 0.3s;
+        }
+        .btn-ghost:hover { border-color: #D2042D; color: #D2042D; }
+        .product-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            transition: all 0.4s;
+        }
+        .product-card:hover { border-color: rgba(210,4,45,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(210,4,45,0.08); }
+        .icon-box {
+            width: 56px; height: 56px; border-radius: 16px;
+            background: rgba(210,4,45,0.08);
+            display: flex; align-items: center; justify-content: center;
+            color: #D2042D; font-size: 22px; transition: all 0.3s;
+        }
+        .product-card:hover .icon-box { background: #D2042D; color: white; }
+        .feature-item { display: flex; align-items: flex-start; gap: 10px; color: #9ca3af; font-size: 13px; line-height: 1.5; }
+        .feature-item i { color: #D2042D; margin-top: 2px; font-size: 11px; flex-shrink: 0; }
+        .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent); }
+        @keyframes marquee-anim { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-track { display: flex; width: max-content; animation: marquee-anim 30s linear infinite; }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-outline" id="cursorOutline"></div>
+
+    <!-- NAVBAR -->
+    <div class="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <nav class="max-w-7xl mx-auto flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/5 rounded-2xl px-6 py-3 shadow-2xl">
+            <a href="/" class="text-xl font-bold tracking-widest text-white">ONYX</a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="/#features" class="hover:text-white transition-colors relative group">
+                    Features
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cherry transition-all group-hover:w-full"></span>
+                </a>
+                <a href="/#faq" class="hover:text-white transition-colors relative group">
+                    FAQ
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cherry transition-all group-hover:w-full"></span>
+                </a>
+                <a href="/templates.html" class="text-cherry font-semibold relative group">
+                    Templates
+                    <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-cherry"></span>
+                </a>
+            </div>
+            <div class="hidden md:block">
+                <a href="/" class="px-5 py-2 bg-white text-black text-xs font-bold uppercase tracking-wide rounded-full hover:bg-cherry hover:text-white transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_rgba(210,4,45,0.6)]">
+                    Get App
+                </a>
+            </div>
+            <button class="md:hidden text-white" onclick="document.getElementById('mob-menu').classList.toggle('hidden')">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </nav>
+    </div>
+
+    <div id="mob-menu" class="hidden fixed inset-0 z-40 bg-onyx flex flex-col items-center justify-center space-y-8 text-2xl font-bold uppercase tracking-widest text-white/80">
+        <button class="absolute top-8 right-8 text-cherry text-3xl" onclick="document.getElementById('mob-menu').classList.add('hidden')">&times;</button>
+        <a href="/#features" onclick="document.getElementById('mob-menu').classList.add('hidden')">Features</a>
+        <a href="/#faq" onclick="document.getElementById('mob-menu').classList.add('hidden')">FAQ</a>
+        <a href="/templates.html" class="text-cherry">Templates</a>
+        <a href="/" onclick="document.getElementById('mob-menu').classList.add('hidden')">Get App</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="relative min-h-[60vh] flex items-center justify-center pt-32 pb-20 overflow-hidden">
+        <div class="absolute inset-0 bg-grid opacity-15 pointer-events-none"></div>
+        <div class="absolute top-0 left-0 w-[700px] h-[700px] bg-cherry/8 rounded-full blur-[150px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/8 rounded-full blur-[150px] pointer-events-none"></div>
+        <div class="container mx-auto px-6 text-center relative z-10" data-aos="fade-up" data-aos-duration="1000">
+            <div class="inline-block px-4 py-1 border border-cherry/30 rounded-full bg-cherry/5 backdrop-blur-sm mb-6 animate-pulse-slow">
+                <span class="text-[10px] uppercase tracking-[0.2em] text-cherry">Source Code · README Included</span>
+            </div>
+            <h1 class="text-5xl md:text-8xl font-bold mb-6 leading-none tracking-tighter">
+                BUILD FASTER.<br>
+                <span class="text-gradient">SHIP TODAY.</span>
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto text-lg mb-10">
+                Production-ready full-stack templates. Real projects, real code — not toy examples. Save weeks of boilerplate and ship your idea immediately.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#templates" class="btn-cherry"><i class="fas fa-box-open"></i> Browse Templates</a>
+                <a href="/" class="btn-ghost"><i class="fas fa-arrow-left text-xs"></i> Back to Onyx AI</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="py-5 bg-cherry overflow-hidden rotate-[-1deg] scale-110 my-6">
+        <div class="marquee-track">
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Full Source Code</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Detailed README</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Production Architecture</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Modern Tech Stacks</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Instant Download</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Full Source Code</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Detailed README</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Production Architecture</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Modern Tech Stacks</span>
+            <span class="text-white/40 px-4">•</span>
+            <span class="text-xs font-bold uppercase tracking-[0.3em] text-white/90 px-8">Instant Download</span>
+            <span class="text-white/40 px-4">•</span>
+        </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <section id="templates" class="py-24 relative">
+        <div class="absolute inset-0 bg-grid opacity-10 pointer-events-none"></div>
+        <div class="container mx-auto px-6 max-w-6xl relative z-10">
+
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Available <span class="text-gradient">Templates</span></h2>
+                <p class="text-gray-500 max-w-lg mx-auto">Each template ships with commented source code, architecture docs, and a step-by-step setup README.</p>
+            </div>
+
+            <!-- FinPulse -->
+            <div id="finpulse" class="product-card p-8 md:p-10 mb-8" data-aos="fade-up">
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase tracking-widest text-gray-600 mb-1">Template 01</div>
+                                <h3 class="text-2xl font-bold text-white">FinPulse</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">An AI-powered SaaS platform for Turkish stock market (BIST) sentiment analysis and price prediction. Features a real-time data ingestion pipeline, Claude AI-driven analysis engine, and a polished Next.js 14 dashboard.</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> FastAPI backend with async data pipelines</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Next.js 14 App Router frontend with TypeScript</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> TimescaleDB time-series database schema</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Claude API integration for sentiment scoring</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Real-time stock data ingestion service</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Authentication, dashboard, alerts system</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Full README with env setup & deployment guide</div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mb-8">
+                            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Next.js 14</span>
+                            <span class="tag">TypeScript</span><span class="tag">TimescaleDB</span><span class="tag">Claude API</span><span class="tag">Docker</span>
+                        </div>
+                        <a href="https://app.lemonsqueezy.com/buy/finpulse" target="_blank" class="btn-cherry">
+                            <i class="fas fa-shopping-cart"></i> Get FinPulse
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-2xl p-6 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-4">What's Included</div>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-folder-tree"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Full Source Code</div><div class="text-xs text-gray-600">Backend + Frontend + DB migrations</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-file-lines"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Detailed README</div><div class="text-xs text-gray-600">Setup, API keys, deployment steps</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-diagram-project"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Architecture Diagram</div><div class="text-xs text-gray-600">System design & data flow</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fab fa-docker"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Docker Compose</div><div class="text-xs text-gray-600">One-command local setup</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-3">Tech Category</div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 bg-cherry rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-300">AI · Finance · SaaS · Full-Stack</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-10"></div>
+
+            <!-- PricePulse -->
+            <div id="pricepulse" class="product-card p-8 md:p-10 mb-8" data-aos="fade-up">
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="icon-box"><i class="fas fa-tags"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase tracking-widest text-gray-600 mb-1">Template 02</div>
+                                <h3 class="text-2xl font-bold text-white">PricePulse</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">A multi-platform price comparison and arbitrage app built with Flutter. Tracks product prices across retailers, sends price drop alerts, and surfaces profit arbitrage opportunities — all with a Firebase-powered real-time backend.</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Flutter cross-platform UI (iOS, Android, Web)</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Firebase Cloud Functions (TypeScript) backend</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Firestore real-time data sync</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Price scraping & comparison engine</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Push notifications for price drops</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Arbitrage opportunity detection logic</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> README with Firebase setup guide</div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mb-8">
+                            <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Firebase</span>
+                            <span class="tag">TypeScript</span><span class="tag">Firestore</span><span class="tag">Cloud Functions</span><span class="tag">FCM</span>
+                        </div>
+                        <a href="https://app.lemonsqueezy.com/buy/pricepulse" target="_blank" class="btn-cherry">
+                            <i class="fas fa-shopping-cart"></i> Get PricePulse
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-2xl p-6 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-4">What's Included</div>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-mobile-screen"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Flutter App Source</div><div class="text-xs text-gray-600">Complete UI + state management</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fab fa-google"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Firebase Backend</div><div class="text-xs text-gray-600">Functions, Firestore rules, indexes</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-file-lines"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Detailed README</div><div class="text-xs text-gray-600">Firebase setup, env config</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-bell"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Push Notification Config</div><div class="text-xs text-gray-600">FCM setup & alert templates</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-3">Tech Category</div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 bg-cherry rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-300">Mobile · E-Commerce · Real-Time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-10"></div>
+
+            <!-- Echo Combat -->
+            <div id="echocombat" class="product-card p-8 md:p-10 mb-8" data-aos="fade-up">
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="icon-box"><i class="fas fa-gamepad"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase tracking-widest text-gray-600 mb-1">Template 03</div>
+                                <h3 class="text-2xl font-bold text-white">Echo Combat</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">A full-source audio-based multiplayer FPS game built in Unity 2022.3 LTS. Players rely on spatial sound cues rather than visuals — a unique and engaging game mechanic. Includes networking, weapons, and combat systems ready to build on.</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Unity 2022.3 LTS full project source</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Audio-based gameplay mechanics (C#)</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Multiplayer networking (Netcode for GameObjects)</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> FPS controller, weapons, and hit detection</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Spatial audio system for directional cues</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Lobby, matchmaking, and game session flow</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> README with Unity setup & build instructions</div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mb-8">
+                            <span class="tag">Unity 2022.3 LTS</span><span class="tag">C#</span><span class="tag">Netcode</span>
+                            <span class="tag">FPS</span><span class="tag">Multiplayer</span><span class="tag">Spatial Audio</span>
+                        </div>
+                        <a href="https://app.lemonsqueezy.com/buy/echocombat" target="_blank" class="btn-cherry">
+                            <i class="fas fa-shopping-cart"></i> Get Echo Combat
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-2xl p-6 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-4">What's Included</div>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-cube"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Unity Project Files</div><div class="text-xs text-gray-600">Full .unitypackage + Assets</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-code"></i></div>
+                                    <div><div class="text-sm text-white font-medium">All C# Scripts</div><div class="text-xs text-gray-600">Commented and organized</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-volume-high"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Audio System</div><div class="text-xs text-gray-600">Spatial audio & directional cues</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-file-lines"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Setup README</div><div class="text-xs text-gray-600">Unity install, build & networking config</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-3">Tech Category</div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 bg-cherry rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-300">Game Dev · Unity · Multiplayer · FPS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider my-10"></div>
+
+            <!-- MacroLens -->
+            <div id="macrolens" class="product-card p-8 md:p-10 mb-8" data-aos="fade-up">
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="icon-box"><i class="fas fa-camera"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase tracking-widest text-gray-600 mb-1">Template 04</div>
+                                <h3 class="text-2xl font-bold text-white">MacroLens</h3>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">AI-powered calorie & macro tracking app for iOS and Android. Users snap a photo of their meal and get instant calorie, protein, carb, and fat breakdowns — powered by Google Gemini. Includes onboarding, diary, streak system, and a RevenueCat paywall.</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Flutter app — iOS & Android from one codebase</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Google Gemini 1.5 Flash food image analysis</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Hive offline-first local database</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> 4-step onboarding with BMR/TDEE calculation</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Calorie ring, macro bars, water tracker, streak</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> RevenueCat paywall (weekly / monthly / yearly)</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> README with Gemini & RevenueCat setup guide</div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mb-8">
+                            <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Gemini API</span>
+                            <span class="tag">Hive</span><span class="tag">RevenueCat</span><span class="tag">iOS</span><span class="tag">Android</span>
+                        </div>
+                        <a href="https://app.lemonsqueezy.com/buy/macrolens" target="_blank" class="btn-cherry">
+                            <i class="fas fa-shopping-cart"></i> Get MacroLens
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-2xl p-6 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-4">What's Included</div>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-mobile-screen"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Full Flutter Source</div><div class="text-xs text-gray-600">All screens, widgets & services</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-brain"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Gemini AI Integration</div><div class="text-xs text-gray-600">Food analysis service + system prompt</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-credit-card"></i></div>
+                                    <div><div class="text-sm text-white font-medium">RevenueCat Paywall</div><div class="text-xs text-gray-600">3 subscription tiers, restore purchases</div></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-cherry text-xs"><i class="fas fa-file-lines"></i></div>
+                                    <div><div class="text-sm text-white font-medium">Detailed README</div><div class="text-xs text-gray-600">API keys, build steps, store metadata</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 border border-white/5">
+                            <div class="text-xs uppercase tracking-widest text-gray-600 mb-3">Tech Category</div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 bg-cherry rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-300">Mobile · AI · Health & Fitness · SaaS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-cherry/5 pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-cherry/10 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="container mx-auto px-6 text-center relative z-10" data-aos="fade-up">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">QUESTIONS?</h2>
+            <p class="text-gray-400 max-w-lg mx-auto mb-10 text-lg">Reach out before you buy. We're happy to answer questions about the code, stack compatibility, or customization scope.</p>
+            <a href="mailto:onyx.ai.helpcenter@gmail.com" class="btn-cherry"><i class="fas fa-envelope"></i> Contact Us</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-onyx pt-16 pb-10 border-t border-white/5 text-sm relative overflow-hidden">
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[200px] bg-gradient-to-t from-cherry/8 to-transparent blur-[80px] pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-10 mb-16 text-gray-500">
+                <div class="col-span-2 md:col-span-1">
+                    <a href="/" class="text-2xl font-bold text-white mb-4 block tracking-widest">ONYX</a>
+                    <p class="leading-relaxed text-sm">Building developer tools and AI products. Templates are real projects built and used in production.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-5 uppercase tracking-wider text-xs">Templates</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#finpulse" class="footer-link">FinPulse</a></li>
+                        <li><a href="#pricepulse" class="footer-link">PricePulse</a></li>
+                        <li><a href="#echocombat" class="footer-link">Echo Combat</a></li>
+                        <li><a href="#macrolens" class="footer-link">MacroLens</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-5 uppercase tracking-wider text-xs">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="mailto:onyx.ai.helpcenter@gmail.com" class="footer-link">Contact</a></li>
+                        <li><a href="/" class="footer-link">Onyx AI App</a></li>
+                        <li><a href="/#faq" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 gap-4">
+                <p>© 2026 Onyx AI Inc. All rights reserved.</p>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Secure Checkout via LemonSqueezy</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 1000, easing: 'ease-out-cubic' });
+        const dot = document.getElementById('cursorDot');
+        const outline = document.getElementById('cursorOutline');
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            outline.style.left = e.clientX + 'px';
+            outline.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => { outline.style.width = '60px'; outline.style.height = '60px'; outline.style.backgroundColor = 'rgba(210,4,45,0.1)'; });
+            el.addEventListener('mouseleave', () => { outline.style.width = '40px'; outline.style.height = '40px'; outline.style.backgroundColor = 'transparent'; });
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+    </script>
+</body>
+</html>
